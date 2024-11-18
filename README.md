@@ -1,25 +1,21 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/M0kyOMLZ)
-# Frobnicator (this is a template)
+# Aplikacja z mini-grami logicznymi
 
-## Authors
-- Andrzej Głuszak (@agluszak on GitHub)
-- Linus Torvalds (@torvalds on GitHub)
+## Autorzy
+- Jan Kuźma
 
-## Description
-Frobnicator is going to be a platformer game similar to Super Mario Bros made using Korge game engine.
+## Opis
+Planuję stworzyć aplikacje zawierającą kilka mini gier logicznych, jeszcze się zastanawiam nad konkretnymi przykładami, ale będzie to coś jak sudoku/krzyżówki/mastermind itp, potencjalnie jakaś przygodowa gra tekstowa.
 
-## Features
-- map generator
-- shooting
-- enemy AI
-- game state saving and loading
-- scores
+## Funkcjonalności
+- gry logiczne singleplayer z kilkoma poziomami,
+- ranking graczy/historia wyników,
+- pomoc dla gracza (podpowiedzi/tutoriale)
 
 ## Plan
-In the first part we're going to implement the basics: movement, physics and shooting. The enemies will simply bounce from one edge of the platform to the other. There will be only a single map.
+W pierwszej części planuję storzyć obsługę ekranów startowych, menu głównego, podstawową nawigacji, jakiś przykład łamigłówki.
 
-In the second part we're going to add random map generator, saving/loading, scores and a more sophisticated AI.
+W drugiej części planuję dodać nowe łamigłówki, rankingi/historie wyników, wskazówki dla graczy oraz potencjalnie (jeśli wyżej wymienione punkty okażą się zbyt mało czasochłonne) tryb multiplayer (być może rozgrywany na jednym telefonie, coś aka gra turowa- np kółko i krzyżyk).
 
-## Libraries
-- Korge (https://korge.org/)
-- kotlinx-serialization (https://github.com/Kotlin/kotlinx.serialization)
+## Biblioteki
+Wstępnie- android studio, w miarę postępów będę dodawał nowe biblioteki
