@@ -5,17 +5,18 @@
 - Jan Kuźma
 
 ## Opis
-Planuję stworzyć aplikacje zawierającą kilka mini gier logicznych, jeszcze się zastanawiam nad konkretnymi przykładami, ale będzie to coś jak sudoku/krzyżówki/mastermind itp, potencjalnie jakaś przygodowa gra tekstowa.
+Planuję stworzyć aplikacje desktopową zawierającą kilka mini gier logicznych, jeszcze się zastanawiam nad konkretnymi przykładami, ale będzie to coś jak sudoku/krzyżówki/mastermind itp, potencjalnie jakaś przygodowa gra tekstowa.
 
 ## Funkcjonalności
 - gry logiczne singleplayer z kilkoma poziomami,
 - ranking graczy/historia wyników,
-- pomoc dla gracza (podpowiedzi/tutoriale)
+- pomoc dla gracza (podpowiedzi/tutoriale),
+- zapis stanu gry.
 
 ## Plan
 W pierwszej części planuję storzyć obsługę ekranów startowych, menu głównego, podstawową nawigacji, jakiś przykład łamigłówki.
 
-W drugiej części planuję dodać nowe łamigłówki, rankingi/historie wyników, wskazówki dla graczy oraz potencjalnie (jeśli wyżej wymienione punkty okażą się zbyt mało czasochłonne) tryb multiplayer (być może rozgrywany na jednym telefonie, coś aka gra turowa- np kółko i krzyżyk).
+W drugiej części planuję dodać nowe łamigłówki, rankingi/historie wyników, wskazówki dla graczy oraz potencjalnie (jeśli wyżej wymienione punkty okażą się zbyt mało czasochłonne) tryb multiplayer (być może rozgrywany na jednym telefonie, coś aka gra turowa- np kółko i krzyżyk). Dodatkowo, po konsultacji- zostanie dodany zapis stanu gry.
 
 ## Biblioteki
-Wstępnie- android studio, w miarę postępów będę dodawał nowe biblioteki
+Będzie to apliakcja desktopowa (rezygnuję z android studio), z użyciem Compose.
