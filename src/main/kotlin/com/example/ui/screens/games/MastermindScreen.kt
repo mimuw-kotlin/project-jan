@@ -18,7 +18,7 @@ fun MastermindScreen(onBack: () -> Unit) {
         Text("Mastermind - Placeholder")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onBack) {
-            Text("Powrót")
+            Text("Back")
         }
     }
 }

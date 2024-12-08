@@ -13,72 +13,75 @@ import com.example.backend.sudoku.SudokuBoard
 
 @Composable
 fun SudokuBoardUI(
-    sudokuBoard: SudokuBoard,
-    selectedCell: Pair<Int, Int>?,
-    onCellClick: (Int, Int) -> Unit
+    sudokuBoard: SudokuBoard?,
+    selectedNode: Pair<Int, Int>?,
+    onNodeClick: (Int, Int) -> Unit,
 ) {
     Column(
         modifier = Modifier.padding(16.dp)
     ) {
         // Loop over each row in the Sudoku board
+        when(sudokuBoard){
+            null -> {Text("Loading...")}
+            else -> {
+                for (row in 0 until 9) {
+                    Row (){
+                        Divider(
+                            color = Color.Black,
+                            thickness = 2.dp,
+                            modifier = Modifier
+                                .height(2.dp)
+                                .width(384.dp)
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(0.dp)
+                    ) {
+                        // Loop over each node in the current row
+                        Divider(
+                            color = Color.Black,
+                            thickness = 2.dp,
+                            modifier = Modifier
+                                .height(40.dp)
+                                .width(2.dp)
+                        )
+                        for (col in 0 until 9) {
+                            val nodeValue = sudokuBoard.content[row][col]
+                            val isSelected = selectedNode == Pair(row, col)
+                            SudokuNode(
+                                value = nodeValue.number,
+                                isSelected = isSelected,
+                                onClick = { onNodeClick(row, col) }
+                            )
+                            Divider(
+                                color = Color.Black,
+                                thickness = 2.dp,
+                                modifier = Modifier
+                                    .height(40.dp)
+                                    .width(2.dp)
+                            )
+                            // Add vertical lines between the nodes
+                        }
+                    }
 
-        for (row in 0 until 9) {
-            Row (){
-                Divider(
-                    color = Color.Black,
-                    thickness = 2.dp,
-                    modifier = Modifier
-                        .height(2.dp)
-                        .width(384.dp)
-                )
-            }
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(0.dp) // No space between cells
-            ) {
-                // Loop over each cell in the current row
-                Divider(
-                    color = Color.Black,
-                    thickness = 2.dp,
-                    modifier = Modifier
-                        .height(40.dp)
-                        .width(2.dp)
-                )
-                for (col in 0 until 9) {
-                    val cellValue = sudokuBoard.content[row][col]
-                    val isSelected = selectedCell == Pair(row, col)
-
-                    // Display the cell without borders
-                    SudokuCell(
-                        value = cellValue.number,
-                        isSelected = isSelected,
-                        onClick = { onCellClick(row, col) }
-                    )
+                }
+                Row (){
                     Divider(
                         color = Color.Black,
                         thickness = 2.dp,
                         modifier = Modifier
-                            .height(40.dp)
-                            .width(2.dp)
+                            .height(2.dp)
+                            .width(384.dp)
                     )
-                    // Add vertical lines between the cells (excluding last column)
                 }
             }
-
-        }
-        Row (){
-            Divider(
-                color = Color.Black,
-                thickness = 2.dp,
-                modifier = Modifier
-                    .height(2.dp)
-                    .width(384.dp)
-            )
         }
     }
 }
 
+//Single Sudoku node
 @Composable
-fun SudokuCell(
+fun SudokuNode(
     value: Int,
     isSelected: Boolean,
     onClick: () -> Unit

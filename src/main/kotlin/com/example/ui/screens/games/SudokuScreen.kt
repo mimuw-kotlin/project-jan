@@ -6,46 +6,51 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.backend.database.services.SudokuService.getSudokuById
+import com.example.backend.sudoku.SudokuBoard
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.example.backend.sudoku.SudokuBoard
+import java.lang.Thread.sleep
 
 @Composable
 fun SudokuScreen(onBack: () -> Unit) {
-    // Przechowywanie stanu planszy, wybranej komórki i wybranego numeru
+    // State of the board, currently selected cell and number
     var selectedCell by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var selectedNumber by remember { mutableStateOf<Int?>(null) }
-    var board by remember { mutableStateOf(SudokuBoard()) }
+    var board by remember { mutableStateOf<SudokuBoard?>(null) }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        try {
+            board = getInitialSudoku(1)
+        } catch (e: Exception) {
+            println("Error during initialization: ${e.message}")
+        }
+    }
 
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Nagłówek z tytułem
         Text("Sudoku", fontSize = 32.sp, modifier = Modifier.padding(16.dp))
 
-        // Plansza Sudoku
         SudokuBoardUI(
             sudokuBoard = board,
-            selectedCell = selectedCell,
-            onCellClick = { x, y ->
-                selectedCell = Pair(x, y) // Ustawienie wybranej komórki
+            selectedNode = selectedCell,
+            onNodeClick = { x, y ->
+                selectedCell = Pair(x, y)
             }
         )
 
-        // Panel z liczbami do wyboru (1-9)
         NumberPad(onNumberClick = { number ->
-            selectedNumber = number // Ustawienie wybranej liczby
-            // Jeśli wybrano komórkę, zaktualizuj jej wartość
+            selectedNumber = number
             selectedCell?.let { (x, y) ->
-                // Tylko wtedy, gdy wybrano liczbę i komórkę
                 if (selectedNumber != null) {
                     scope.launch {
-                        val updatedBoard = updateCellAsync(board, x, y, selectedNumber!!)
-                        board = updatedBoard // Zaktualizowanie planszy
+                        val updatedBoard = updateCell(board, x, y, selectedNumber!!)
+                        board = updatedBoard
                     }
                 }
             }
@@ -53,21 +58,24 @@ fun SudokuScreen(onBack: () -> Unit) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Przycisk powrotu
         Button(onClick = onBack) {
-            Text("Powrót")
+            Text("Back")
         }
     }
 }
 
-suspend fun updateCellAsync(board: SudokuBoard, x: Int, y: Int, number: Int): SudokuBoard {
-    return withContext(Dispatchers.Default) {
-        // Tworzenie nowej planszy z aktualizowaną wartością w komórce
-        val newBoard = board.content.toMutableList().apply {
-            this[x] = this[x].toMutableList().apply {
-                this[y] = this[y].copy(number = number) // Aktualizowanie komórki
-            }
+fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): SudokuBoard {
+    val newBoard = board!!.content.toMutableList().apply {
+        this[x] = this[x].toMutableList().apply {
+            this[y] = this[y].copy(number = number)
         }
-        SudokuBoard(newBoard) // Zwracamy nową planszę
+    }
+    return SudokuBoard(newBoard)
+}
+
+suspend fun getInitialSudoku(id: Int) : SudokuBoard{
+    return withContext(Dispatchers.IO){
+        sleep(3000) //To show that coroutines work :)
+        SudokuBoard.deserialize(getSudokuById(id)!!)
     }
 }

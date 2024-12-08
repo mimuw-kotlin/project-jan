@@ -1,5 +1,8 @@
 package com.example.backend.sudoku
+import kotlinx.serialization.Serializable
 
+
+@Serializable
 data class Node (
     val x: Int,
     val y: Int,

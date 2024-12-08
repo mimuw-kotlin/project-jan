@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.screens.games.MastermindScreen
-//import com.example.ui.screens.games.
 import com.example.ui.screens.games.TicTacToeScreen
 
 enum class Game {
@@ -33,7 +32,7 @@ fun GameMenu() {
 
 @Composable
 fun MenuScreen(onGameSelect: (Game) -> Unit) {
-    val games = listOf("Sudoku", "Mastermind", "Kółko i Krzyżyk")
+    val games = listOf("Sudoku", "Mastermind", "Tick Tac Toe")
     var currentIndex by remember { mutableStateOf(0) }
 
     Column(
@@ -52,14 +51,14 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                 onClick = { currentIndex = if (currentIndex > 0) currentIndex - 1 else games.size - 1 },
                 modifier = Modifier.padding(8.dp)
             ) {
-                Text("Poprzednia")
+                Text("Previous")
             }
 
             Button(
                 onClick = { currentIndex = (currentIndex + 1) % games.size },
                 modifier = Modifier.padding(8.dp)
             ) {
-                Text("Następna")
+                Text("Next")
             }
         }
 

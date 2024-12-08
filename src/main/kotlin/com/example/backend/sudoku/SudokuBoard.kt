@@ -1,13 +1,16 @@
 package com.example.backend.sudoku
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+
 data class SudokuBoard(
     val content: MutableList<MutableList<Node>> = MutableList(9) { x ->
         MutableList(9) { y ->
-            Node(x, y) // Wypełniamy wiersze i kolumny obiektami Node
+            Node(x, y)
         }
     }
 ) {
-
 
     fun isValidNumber(x: Int, y: Int, number: Int): Boolean {
         if (content[x].any { it.x == number && it.y != y }) return false
@@ -21,7 +24,6 @@ data class SudokuBoard(
                 if (content[row][col].number == number && (row != x || col != y)) return false
             }
         }
-
         return true
     }
 
@@ -36,5 +38,20 @@ data class SudokuBoard(
         return true
     }
 
+    fun serialize(): String {
+        return Json.encodeToString(content)
+    }
 
+    companion object {
+        fun deserialize(json: String): SudokuBoard {
+            val nodes = Json.decodeFromString<List<List<Node>>>(json)
+            val board = SudokuBoard()
+            for (row in nodes.indices) {
+                for (col in nodes[row].indices) {
+                    board.content[row][col] = nodes[row][col]
+                }
+            }
+            return board
+        }
+    }
 }

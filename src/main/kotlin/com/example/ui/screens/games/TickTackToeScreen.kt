@@ -15,10 +15,10 @@ fun TicTacToeScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Kółko i Krzyżyk - Placeholder")
+        Text("Tick Tac Toe - Placeholder")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onBack) {
-            Text("Powrót")
+            Text("Back")
         }
     }
 }
