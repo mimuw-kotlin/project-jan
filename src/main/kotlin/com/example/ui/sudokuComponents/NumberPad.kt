@@ -7,15 +7,20 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun NumberPad(onNumberClick: (Int) -> Unit) {
-    Row(
+    Column(
         modifier = Modifier
-            .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        for (number in 1..9) {
-            Button(onClick = { onNumberClick(number) }) {
-                Text(number.toString())
+        (1..9).chunked(3).forEach { rowNumbers ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                rowNumbers.forEach { number ->
+                    Button(onClick = { onNumberClick(number) }) {
+                        Text(number.toString())
+                    }
+                }
             }
         }
     }

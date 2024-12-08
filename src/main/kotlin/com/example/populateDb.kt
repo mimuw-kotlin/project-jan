@@ -1,23 +1,21 @@
 package com.example
 
-import androidx.compose.ui.window.Window
-import androidx.compose.ui.window.application
 import com.example.backend.database.entities.SudokuBoards
 import com.example.backend.database.services.SudokuService.insertSudoku
 import com.example.backend.sudoku.Node
 import com.example.backend.sudoku.SudokuBoard
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.deleteAll
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 fun populate() = runBlocking {
 
     database.DatabaseConfig.init()
 
-    //Example sudoku, in the future could be replaced with own logi of generating sudoku
-    var board = mutableListOf<MutableList<Int>>(
+    //Example sudoku, in the future could be replaced with own logic of generating sudoku
+    val boardNodesValues = mutableListOf<MutableList<Int>>(
     mutableListOf(0, 0, 5, 0, 0, 0, 7, 0, 0, 0, 4),
     mutableListOf(6, 0, 9, 0, 3, 1, 0, 5, 0),
     mutableListOf(8, 0, 0, 0, 0, 9, 0, 1, 0),
@@ -29,10 +27,10 @@ fun populate() = runBlocking {
     mutableListOf(9, 6, 0, 0, 0, 0, 0, 0, 0)
     )
 
-    var board2 = SudokuBoard()
+    val board = SudokuBoard()
     for (i in 0..<9){
         for (j in 0..<9){
-            board2.content[i][j] = Node(i, j, board[i][j], true)
+            board.content[i][j] = Node(i, j, boardNodesValues[i][j], generated = boardNodesValues[i][j] != 0)
         }
     }
 
@@ -40,6 +38,11 @@ fun populate() = runBlocking {
         url = "jdbc:sqlite:backend.db",
         driver = "org.sqlite.JDBC"
     )
-    insertSudoku(board2.serialize())
 
+    transaction {
+        SudokuBoards.deleteAll()
+    }
+
+    insertSudoku(board.serialize(), 1)
+    insertSudoku(board.serialize(), 2)
 }

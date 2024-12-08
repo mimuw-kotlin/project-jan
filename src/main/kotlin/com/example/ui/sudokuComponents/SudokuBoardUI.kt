@@ -1,3 +1,5 @@
+package com.example.ui.sudokuComponents
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,20 +20,26 @@ fun SudokuBoardUI(
     onNodeClick: (Int, Int) -> Unit,
 ) {
     Column(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(8.dp)
     ) {
         // Loop over each row in the Sudoku board
         when(sudokuBoard){
-            null -> {Text("Loading...")}
+            null -> {Box(
+                modifier = Modifier
+                    .width(fullLen)
+                    .height(fullLen),
+                contentAlignment = Alignment.Center
+            ){
+                Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+            }}
             else -> {
                 for (row in 0 until 9) {
                     Row (){
                         Divider(
-                            color = Color.Black,
-                            thickness = 2.dp,
+                            color = dividerColor,
                             modifier = Modifier
-                                .height(2.dp)
-                                .width(384.dp)
+                                .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
+                                .width(fullLen)
                         )
                     }
                     Row(
@@ -39,26 +47,34 @@ fun SudokuBoardUI(
                     ) {
                         // Loop over each node in the current row
                         Divider(
-                            color = Color.Black,
-                            thickness = 2.dp,
+                            color = dividerColor,
                             modifier = Modifier
-                                .height(40.dp)
-                                .width(2.dp)
+                                .height(cellWidth)
+                                .width(dividerWidth)
                         )
                         for (col in 0 until 9) {
                             val nodeValue = sudokuBoard.content[row][col]
                             val isSelected = selectedNode == Pair(row, col)
+                            var isAdjacentToSelected = false
+                            var isAdjacentSquare = false
+                            if (selectedNode != null) {
+                                isAdjacentToSelected = (selectedNode.first == row) || (selectedNode.second == col)
+                                isAdjacentSquare =
+                                    (row / 3) * 3 + (col / 3) == (selectedNode.first / 3) * 3 + (selectedNode.second / 3)
+                            }
+
                             SudokuNode(
                                 value = nodeValue.number,
                                 isSelected = isSelected,
-                                onClick = { onNodeClick(row, col) }
+                                onClick = { onNodeClick(row, col) },
+                                isAdjacentToSelected = isAdjacentToSelected,
+                                isAdjacentSquare = isAdjacentSquare
                             )
                             Divider(
-                                color = Color.Black,
-                                thickness = 2.dp,
+                                color = dividerColor,
                                 modifier = Modifier
-                                    .height(40.dp)
-                                    .width(2.dp)
+                                    .height(cellWidth)
+                                    .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
                             )
                             // Add vertical lines between the nodes
                         }
@@ -68,10 +84,10 @@ fun SudokuBoardUI(
                 Row (){
                     Divider(
                         color = Color.Black,
-                        thickness = 2.dp,
+                        thickness = dividerWidth,
                         modifier = Modifier
-                            .height(2.dp)
-                            .width(384.dp)
+                            .height(dividerWidth)
+                            .width(fullLen)
                     )
                 }
             }
@@ -84,6 +100,8 @@ fun SudokuBoardUI(
 fun SudokuNode(
     value: Int,
     isSelected: Boolean,
+    isAdjacentToSelected: Boolean,
+    isAdjacentSquare: Boolean,
     onClick: () -> Unit
 ) {
     Box(
@@ -92,7 +110,9 @@ fun SudokuNode(
             .clickable(onClick = onClick)
             .background(
                 color = if (isSelected){
-                    Color(0xFF00FA9A)
+                    selectedCellColor
+                }else if (isAdjacentToSelected || isAdjacentSquare) {
+                    adjacentColor
                 }else{
                     Color.Transparent
                 }
@@ -102,7 +122,7 @@ fun SudokuNode(
         Text(
             text = if (value == 0) "" else value.toString(),
             fontSize = 18.sp,
-            color = if (isSelected) Color.Blue else Color.Black
+            color = Color.Black
         )
     }
 }
