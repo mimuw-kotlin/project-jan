@@ -1,4 +1,4 @@
-package app.ui.screens.games
+package com.example.ui.screens.games
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

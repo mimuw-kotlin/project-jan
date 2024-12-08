@@ -1,9 +1,10 @@
-package app
+package com.example
+
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import app.ui.screens.GameMenu
+import com.example.ui.screens.GameMenu
 
 @Composable
 @Preview

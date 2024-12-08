@@ -1,5 +1,6 @@
-package app.ui.screens
+package com.example.ui.screens
 
+import SudokuScreen
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -8,9 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.ui.screens.games.MastermindScreen
-import app.ui.screens.games.SudokuScreen
-import app.ui.screens.games.TicTacToeScreen
+import com.example.ui.screens.games.MastermindScreen
+//import com.example.ui.screens.games.
+import com.example.ui.screens.games.TicTacToeScreen
 
 enum class Game {
     MENU, SUDOKU, MASTERMIND, TIC_TAC_TOE
@@ -18,7 +19,6 @@ enum class Game {
 
 @Composable
 fun GameMenu() {
-    // Stan przechowujący aktualny ekran
     var currentScreen by remember { mutableStateOf(Game.MENU) }
 
     when (currentScreen) {
