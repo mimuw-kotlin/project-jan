@@ -1,10 +1,12 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.backend.database.services.SudokuService.getSudokuById
@@ -77,7 +79,11 @@ fun SudokuScreen(onBack: () -> Unit) {
                 .padding(4.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = onBack) {
+            Button(onClick = onBack,
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White
+                )) {
                 Text("Back")
             }
 
@@ -89,7 +95,11 @@ fun SudokuScreen(onBack: () -> Unit) {
                     board = null
                     board = saveSudoku(temp)
                 }
-            }) {
+            },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White
+                )) {
                 Text("Save progress")
             }
 
@@ -104,13 +114,14 @@ fun SudokuScreen(onBack: () -> Unit) {
                         println("Error during creating new game: ${e.message}")
                     }
                 }
-            }) {
+            },colors = ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White
+                )) {
                 Text("New game")
             }
         }
     }
-
-
 }
 
 fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): SudokuBoard {

@@ -1,17 +1,23 @@
 package com.example.ui.screens
 
 import SudokuScreen
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ui.screens.games.MastermindScreen
 import com.example.ui.screens.games.TicTacToeScreen
-
 enum class Game {
     MENU, SUDOKU, MASTERMIND, TIC_TAC_TOE
 }
@@ -40,41 +46,89 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
         Text(
-            text = games[currentIndex],
-            fontSize = 32.sp,
-            modifier = Modifier.padding(16.dp)
+            text = "Game Menu",
+            fontSize = 50.sp,
+            color = Color.Black,
+            fontFamily = FontFamily.Serif
         )
 
-        Row {
-            Button(
-                onClick = { currentIndex = if (currentIndex > 0) currentIndex - 1 else games.size - 1 },
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text("Previous")
-            }
+        Spacer(modifier = Modifier.height(100.dp))
 
-            Button(
-                onClick = { currentIndex = (currentIndex + 1) % games.size },
-                modifier = Modifier.padding(8.dp)
-            ) {
-                Text("Next")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                when (currentIndex) {
-                    0 -> onGameSelect(Game.SUDOKU)
-                    1 -> onGameSelect(Game.MASTERMIND)
-                    2 -> onGameSelect(Game.TIC_TAC_TOE)
-                }
-            },
-            modifier = Modifier.padding(8.dp)
+        Box(
+            modifier = Modifier
+                .padding(16.dp) // Padding around the Box
+                .fillMaxWidth() // Box takes up full width
+                .height(300.dp) // Set height for Box
+                .background(Color(0xFFD0B8A8), RoundedCornerShape(16.dp)) // Background color + rounded corners
+                .padding(16.dp) // Padding inside the Box
         ) {
-            Text("Start")
+            Column(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Displaying the name of the game
+                Text(
+                    text = games[currentIndex],
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFC5705D),
+                    modifier = Modifier.padding(bottom = 16.dp) // Space between text and buttons
+                )
+
+                // Buttons to navigate between games
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { currentIndex = if (currentIndex > 0) currentIndex - 1 else games.size - 1 },
+                        modifier = Modifier.padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFC5705D),
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text("Previous")
+                    }
+
+                    Button(
+                        onClick = { currentIndex = (currentIndex + 1) % games.size },
+                        modifier = Modifier.padding(8.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFC5705D),
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text("Next")
+                    }
+                }
+
+                Button(
+                    onClick = {
+                        when (currentIndex) {
+                            0 -> onGameSelect(Game.SUDOKU)
+                            1 -> onGameSelect(Game.MASTERMIND)
+                            2 -> onGameSelect(Game.TIC_TAC_TOE)
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .width(150.dp)
+                        .height(75.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        backgroundColor = Color(0xFFC5705D),
+                        contentColor = Color.White
+                    )
+                ) {
+                    Text("Start", color = Color.White, fontSize = 20.sp)
+                }
+            }
         }
+
+
     }
 }

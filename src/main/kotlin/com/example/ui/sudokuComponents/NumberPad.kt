@@ -1,8 +1,10 @@
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -17,7 +19,12 @@ fun NumberPad(onNumberClick: (Int) -> Unit) {
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 rowNumbers.forEach { number ->
-                    Button(onClick = { onNumberClick(number) }) {
+                    Button(
+                        onClick = { onNumberClick(number)},
+                        colors = ButtonDefaults.buttonColors(
+                            backgroundColor = Color(0xFFC5705D),
+                            contentColor = Color.White
+                        )) {
                         Text(number.toString())
                     }
                 }
