@@ -29,7 +29,7 @@ Struktura projektu- w głównym folderze aplikacji znajdują się następujące 
 należy odpowiednio zmienić kod w Main.kt (uruchomić jedynie z funkcją populate())
 - /backend/sudoku/Node.kt - deklaracja klasy pojedynczej komórki na planszy sudoku
 - /backend/sudoku/SudokuBoard.kt - deklaracja klasy planszy sudoku, zawiera m.in serializacje oraz funckje sprawdzające poprawność planszy
-- /backend/entities/SudokuEntity - zawiera deklaracje tabeli przechowującej sudoku
+- /backend/entities/SudokuBoards - zawiera deklaracje tabeli przechowującej sudoku
 - /ui/screens/GameMenu.kt - główny widok statowego menu
 - /ui/screens/games/MastermindScreen.kt - placeholder screen dla gry Mastermind
 - /ui/screens/games/TickTakToe.kt - placeholder screen dla gry Kółko i Krzyżyk

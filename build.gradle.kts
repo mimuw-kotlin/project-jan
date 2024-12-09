@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.compose")
     id("org.jetbrains.kotlin.plugin.compose")
     kotlin("plugin.serialization") version "1.6.0"
+    id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
 }
 
 group = "com.example"
@@ -29,9 +30,8 @@ dependencies {
     implementation("org.xerial:sqlite-jdbc:3.42.0.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-    implementation ("org.slf4j:slf4j-api:2.0.16.")
+    implementation("org.slf4j:slf4j-api:2.0.16.")
     implementation("org.slf4j:slf4j-simple:2.0.16")
-
 }
 
 compose.desktop {

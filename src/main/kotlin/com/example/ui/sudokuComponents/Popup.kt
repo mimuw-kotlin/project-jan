@@ -17,8 +17,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
-//Popup that should inform user, if the sudoku was saved successfully.
-//Not implemented yet: error handling should be developed int the second part of the project.
+// Popup that should inform user, if the sudoku was saved successfully.
+// Not implemented yet: error handling should be developed int the second part of the project.
 @Composable
 fun ResultPopup(showPopup: Boolean, success: Boolean, message: String?, onDismiss: () -> Unit) {
     if (showPopup) {

@@ -2,7 +2,14 @@ package com.example.ui.sudokuComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.TabRowDefaults.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,34 +25,36 @@ fun SudokuBoardUI(
     sudokuBoard: SudokuBoard?,
     selectedNode: Pair<Int, Int>?,
     onNodeClick: (Int, Int) -> Unit,
-    completed: Boolean,
+    completed: Boolean
 ) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        //Checking if the board is completed
-        if(completed) {
+        // Checking if the board is completed
+        if (completed) {
             Box(
                 modifier = Modifier
                     .width(fullLen)
                     .height(fullLen),
                 contentAlignment = Alignment.Center
-            ){
+            ) {
                 Text("CONGRATULATIONS", fontSize = 40.sp)
             }
-        }else{
-            when(sudokuBoard){
-                null -> {Box(   //Simulation of long communication, loading screen
-                    modifier = Modifier
-                        .width(fullLen)
-                        .height(fullLen),
-                    contentAlignment = Alignment.Center
-                ){
-                    Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
-                }}
-                else -> {   //Displaying the whole board
+        } else {
+            when (sudokuBoard) {
+                null -> {
+                    Box( // Simulation of long communication, loading screen
+                        modifier = Modifier
+                            .width(fullLen)
+                            .height(fullLen),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+                    }
+                }
+                else -> { // Displaying the whole board
                     for (row in 0 until 9) {
-                        Row (){
+                        Row() {
                             Divider(
                                 color = dividerColor,
                                 modifier = Modifier
@@ -89,9 +98,8 @@ fun SudokuBoardUI(
                                 )
                             }
                         }
-
                     }
-                    Row (){
+                    Row() {
                         Divider(
                             color = Color.Black,
                             thickness = dividerWidth,
@@ -106,7 +114,7 @@ fun SudokuBoardUI(
     }
 }
 
-//Single Sudoku node
+// Single Sudoku node
 @Composable
 fun SudokuNode(
     value: Int,
@@ -114,20 +122,20 @@ fun SudokuNode(
     isAdjacentToSelected: Boolean,
     isAdjacentSquare: Boolean,
     onClick: () -> Unit,
-    isValid: Boolean,
+    isValid: Boolean
 ) {
     Box(
         modifier = Modifier
             .size(40.dp)
             .clickable(onClick = onClick)
             .background(
-                color = if(!isValid){
+                color = if (!isValid) {
                     Color.Red
-                }else if (isSelected){
+                } else if (isSelected) {
                     selectedCellColor
-                }else if (isAdjacentToSelected || isAdjacentSquare) {
+                } else if (isAdjacentToSelected || isAdjacentSquare) {
                     adjacentColor
-                }else{
+                } else {
                     Color.Transparent
                 }
             ),
@@ -140,4 +148,3 @@ fun SudokuNode(
         )
     }
 }
-

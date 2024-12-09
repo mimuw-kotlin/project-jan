@@ -3,10 +3,13 @@ package com.example.backend.database.services
 import com.example.backend.database.entities.SudokuBoards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
-//Basic functions that provide comunication with databse
+// Basic functions that provide comunication with databse
 object SudokuService {
     suspend fun insertSudoku(board: String, id: Int) = withContext(Dispatchers.IO) {
         transaction {
@@ -34,7 +37,7 @@ object SudokuService {
 
     suspend fun updateSudoku(board: String, id: Int) = withContext(Dispatchers.IO) {
         transaction {
-            SudokuBoards.update({SudokuBoards.id eq id}) {
+            SudokuBoards.update({ SudokuBoards.id eq id }) {
                 it[SudokuBoards.board] = board
             }
         }

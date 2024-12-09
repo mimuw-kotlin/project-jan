@@ -3,7 +3,7 @@ package com.example.ui.sudokuComponents
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
-//Easy UI parameters modifications: mainly about design of the board
+// Easy UI parameters modifications: mainly about design of the board
 val cellWidth = 40.dp
 val thinDividerWidth = 1.dp
 val dividerWidth = 2.dp
