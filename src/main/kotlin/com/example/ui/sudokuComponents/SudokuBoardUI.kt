@@ -18,77 +18,90 @@ fun SudokuBoardUI(
     sudokuBoard: SudokuBoard?,
     selectedNode: Pair<Int, Int>?,
     onNodeClick: (Int, Int) -> Unit,
+    completed: Boolean,
 ) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
         // Loop over each row in the Sudoku board
-        when(sudokuBoard){
-            null -> {Box(
+        if(completed) {
+            Box(
                 modifier = Modifier
                     .width(fullLen)
                     .height(fullLen),
                 contentAlignment = Alignment.Center
             ){
-                Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
-            }}
-            else -> {
-                for (row in 0 until 9) {
-                    Row (){
-                        Divider(
-                            color = dividerColor,
-                            modifier = Modifier
-                                .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
-                                .width(fullLen)
-                        )
-                    }
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(0.dp)
-                    ) {
-                        // Loop over each node in the current row
-                        Divider(
-                            color = dividerColor,
-                            modifier = Modifier
-                                .height(cellWidth)
-                                .width(dividerWidth)
-                        )
-                        for (col in 0 until 9) {
-                            val nodeValue = sudokuBoard.content[row][col]
-                            val isSelected = selectedNode == Pair(row, col)
-                            var isAdjacentToSelected = false
-                            var isAdjacentSquare = false
-                            if (selectedNode != null) {
-                                isAdjacentToSelected = (selectedNode.first == row) || (selectedNode.second == col)
-                                isAdjacentSquare =
-                                    (row / 3) * 3 + (col / 3) == (selectedNode.first / 3) * 3 + (selectedNode.second / 3)
-                            }
-
-                            SudokuNode(
-                                value = nodeValue.number,
-                                isSelected = isSelected,
-                                onClick = { onNodeClick(row, col) },
-                                isAdjacentToSelected = isAdjacentToSelected,
-                                isAdjacentSquare = isAdjacentSquare
+                Text("CONGRATULATIONS", fontSize = 40.sp)
+            }
+        }else{
+            when(sudokuBoard){
+                null -> {Box(
+                    modifier = Modifier
+                        .width(fullLen)
+                        .height(fullLen),
+                    contentAlignment = Alignment.Center
+                ){
+                    Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
+                }}
+                else -> {
+                    for (row in 0 until 9) {
+                        Row (){
+                            Divider(
+                                color = dividerColor,
+                                modifier = Modifier
+                                    .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
+                                    .width(fullLen)
                             )
+                        }
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(0.dp)
+                        ) {
+                            // Loop over each node in the current row
                             Divider(
                                 color = dividerColor,
                                 modifier = Modifier
                                     .height(cellWidth)
-                                    .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
+                                    .width(dividerWidth)
                             )
-                            // Add vertical lines between the nodes
-                        }
-                    }
+                            for (col in 0 until 9) {
+                                val nodeValue = sudokuBoard.content[row][col]
+                                val isSelected = selectedNode == Pair(row, col)
+                                var isAdjacentToSelected = false
+                                var isAdjacentSquare = false
+                                if (selectedNode != null) {
+                                    isAdjacentToSelected = (selectedNode.first == row) || (selectedNode.second == col)
+                                    isAdjacentSquare =
+                                        (row / 3) * 3 + (col / 3) == (selectedNode.first / 3) * 3 + (selectedNode.second / 3)
+                                }
 
-                }
-                Row (){
-                    Divider(
-                        color = Color.Black,
-                        thickness = dividerWidth,
-                        modifier = Modifier
-                            .height(dividerWidth)
-                            .width(fullLen)
-                    )
+                                SudokuNode(
+                                    value = nodeValue.number,
+                                    isSelected = isSelected,
+                                    onClick = { onNodeClick(row, col) },
+                                    isAdjacentToSelected = isAdjacentToSelected,
+                                    isAdjacentSquare = isAdjacentSquare,
+                                    isValid = nodeValue.isValid
+                                )
+                                Divider(
+                                    color = dividerColor,
+                                    modifier = Modifier
+                                        .height(cellWidth)
+                                        .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
+                                )
+                                // Add vertical lines between the nodes
+                            }
+                        }
+
+                    }
+                    Row (){
+                        Divider(
+                            color = Color.Black,
+                            thickness = dividerWidth,
+                            modifier = Modifier
+                                .height(dividerWidth)
+                                .width(fullLen)
+                        )
+                    }
                 }
             }
         }
@@ -102,14 +115,17 @@ fun SudokuNode(
     isSelected: Boolean,
     isAdjacentToSelected: Boolean,
     isAdjacentSquare: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isValid: Boolean,
 ) {
     Box(
         modifier = Modifier
             .size(40.dp)
             .clickable(onClick = onClick)
             .background(
-                color = if (isSelected){
+                color = if(!isValid){
+                    Color.Red
+                }else if (isSelected){
                     selectedCellColor
                 }else if (isAdjacentToSelected || isAdjacentSquare) {
                     adjacentColor

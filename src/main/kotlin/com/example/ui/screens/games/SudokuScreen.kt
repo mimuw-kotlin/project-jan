@@ -1,5 +1,4 @@
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
@@ -25,6 +24,7 @@ fun SudokuScreen(onBack: () -> Unit) {
     var selectedNumber by remember { mutableStateOf<Int?>(null) }
     var board by remember { mutableStateOf<SudokuBoard?>(null) }
     var showPopup by remember { mutableStateOf(false) }
+    var completed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
@@ -52,6 +52,7 @@ fun SudokuScreen(onBack: () -> Unit) {
             SudokuBoardUI(
                 sudokuBoard = board,
                 selectedNode = selectedCell,
+                completed = completed,
                 onNodeClick = { x, y ->
                     selectedCell = Pair(x, y)
                 },
@@ -66,7 +67,8 @@ fun SudokuScreen(onBack: () -> Unit) {
                         if (selectedNumber != null) {
                             scope.launch {
                                 val updatedBoard = updateCell(board, x, y, selectedNumber!!)
-                                board = updatedBoard
+                                board = updatedBoard.first
+                                completed = updatedBoard.second
                             }
                         }
                     }
@@ -84,7 +86,7 @@ fun SudokuScreen(onBack: () -> Unit) {
                     backgroundColor = Color(0xFFC5705D),
                     contentColor = Color.White
                 )) {
-                Text("Back")
+                Text("Main Menu")
             }
 
             Spacer(modifier = Modifier.width(8.dp))
@@ -124,22 +126,26 @@ fun SudokuScreen(onBack: () -> Unit) {
     }
 }
 
-fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): SudokuBoard {
+fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): Pair<SudokuBoard, Boolean> {
     if (!board!!.content[x][y].generated){
         val newBoard = board.content.toMutableList().apply {
             this[x] = this[x].toMutableList().apply {
                 this[y] = this[y].copy(number = number)
             }
         }
-        return SudokuBoard(newBoard)
+        val result = SudokuBoard(newBoard)
+        result.validate()
+        return Pair(result, result.isBoardValid())
     }
-   return board
+   return Pair(board, false)
 }
 
 suspend fun getInitialSudoku() : SudokuBoard{
     return withContext(Dispatchers.IO){
         sleep(1000) //To show that coroutines work :)
-        SudokuBoard.deserialize(getSudokuById(1)!!)
+        val result = SudokuBoard.deserialize(getSudokuById(1)!!)
+        result.validate()
+        result
     }
 }
 

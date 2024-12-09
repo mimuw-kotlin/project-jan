@@ -16,7 +16,7 @@ fun populate() = runBlocking {
 
     //Example sudoku, in the future could be replaced with own logic of generating sudoku
     val boardNodesValues = mutableListOf<MutableList<Int>>(
-    mutableListOf(0, 0, 5, 0, 0, 0, 7, 0, 0, 0, 4),
+    mutableListOf(5, 0, 0, 0, 7, 0, 0, 0, 4),
     mutableListOf(6, 0, 9, 0, 3, 1, 0, 5, 0),
     mutableListOf(8, 0, 0, 0, 0, 9, 0, 1, 0),
     mutableListOf(4, 9, 0, 1, 0, 0, 8, 0, 2),

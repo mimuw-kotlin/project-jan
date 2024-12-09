@@ -30,5 +30,13 @@ fun NumberPad(onNumberClick: (Int) -> Unit) {
                 }
             }
         }
+        Button(
+            onClick = { onNumberClick(0)},
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFFC5705D),
+                contentColor = Color.White
+            )) {
+            Text("Clear Cell")
+        }
     }
 }

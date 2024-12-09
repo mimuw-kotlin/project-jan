@@ -13,15 +13,21 @@ data class SudokuBoard(
 ) {
 
     fun isValidNumber(x: Int, y: Int, number: Int): Boolean {
-        if (content[x].any { it.x == number && it.y != y }) return false
+        if (content[x].any { it.number == number && it.y != y }){
+            return false
+        }
 
-        if (content.any { it[y].number == number && it[x].x != x }) return false
+        if (content.any { it[y].number == number && it != content[x] }) {
+            return false
+        }
 
         val startRow = (x / 3) * 3
         val startCol = (y / 3) * 3
         for (row in startRow until startRow + 3) {
             for (col in startCol until startCol + 3) {
-                if (content[row][col].number == number && (row != x || col != y)) return false
+                if (content[row][col].number == number && (row != x || col != y)){
+                    return false
+                }
             }
         }
         return true
@@ -30,12 +36,20 @@ data class SudokuBoard(
     fun isBoardValid(): Boolean {
         for (row in content) {
             for (node in row) {
-                if (!isValidNumber(node.x, node.y, node.number)) {
+                if (!isValidNumber(node.x, node.y, node.number) || node.number == 0) {
                     return false
                 }
             }
         }
         return true
+    }
+
+    fun validate() {
+        for (row in content) {
+            for (node in row) {
+                node.isValid = if (node.number != 0) isValidNumber(node.x, node.y, node.number) else true
+            }
+        }
     }
 
     fun serialize(): String {
