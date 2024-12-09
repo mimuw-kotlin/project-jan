@@ -1,4 +1,4 @@
-package com.example.ui.screens
+package com.app.ui.screens
 
 import SudokuScreen
 import androidx.compose.foundation.background
@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.ui.screens.games.MastermindScreen
-import com.example.ui.screens.games.TicTacToeScreen
+import com.app.ui.screens.games.MastermindScreen
+import com.app.ui.screens.games.TicTacToeScreen
 enum class Game {
     MENU, SUDOKU, MASTERMIND, TIC_TAC_TOE
 }

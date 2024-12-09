@@ -1,4 +1,4 @@
-package com.example.backend.database.entities
+package com.app.backend.database.entities
 
 import org.jetbrains.exposed.sql.Table
 

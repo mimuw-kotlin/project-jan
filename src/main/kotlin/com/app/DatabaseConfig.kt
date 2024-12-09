@@ -1,6 +1,6 @@
 package database
 
-import com.example.backend.database.entities.SudokuBoards
+import com.app.backend.database.entities.SudokuBoards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database

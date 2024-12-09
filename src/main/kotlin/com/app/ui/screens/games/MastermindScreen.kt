@@ -1,4 +1,4 @@
-package com.example.ui.screens.games
+package com.app.ui.screens.games
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,15 +13,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-// Tick Tack Toe Screen, currently not developed
+// Mastermind Screen, currently not developed
 @Composable
-fun TicTacToeScreen(onBack: () -> Unit) {
+fun MastermindScreen(onBack: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Tic Tac Toe - Placeholder")
+        Text("Mastermind - Placeholder")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onBack) {
             Text("Back")

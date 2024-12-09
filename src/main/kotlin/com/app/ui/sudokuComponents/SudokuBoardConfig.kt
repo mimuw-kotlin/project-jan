@@ -1,4 +1,4 @@
-package com.example.ui.sudokuComponents
+package com.app.ui.sudokuComponents
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp

@@ -1,4 +1,4 @@
-package com.example.ui.sudokuComponents
+package com.app.ui.sudokuComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.backend.sudoku.SudokuBoard
+import com.app.backend.sudoku.SudokuBoard
 
 @Composable
 fun SudokuBoardUI(

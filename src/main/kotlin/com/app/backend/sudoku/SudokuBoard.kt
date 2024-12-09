@@ -1,4 +1,4 @@
-package com.example.backend.sudoku
+package com.app.backend.sudoku
 
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json

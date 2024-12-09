@@ -8,7 +8,7 @@ plugins {
     id("org.jlleitschuh.gradle.ktlint") version "11.3.2"
 }
 
-group = "com.example"
+group = "com.app"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -36,7 +36,7 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "com.example.MainKt"
+        mainClass = "com.app.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

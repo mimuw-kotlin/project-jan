@@ -1,4 +1,4 @@
-package com.example.ui.sudokuComponents
+package com.app.ui.sudokuComponents
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

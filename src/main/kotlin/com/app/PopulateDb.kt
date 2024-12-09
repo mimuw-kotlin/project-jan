@@ -1,9 +1,9 @@
-package com.example
+package com.app
 
-import com.example.backend.database.entities.SudokuBoards
-import com.example.backend.database.services.SudokuService.insertSudoku
-import com.example.backend.sudoku.Node
-import com.example.backend.sudoku.SudokuBoard
+import com.app.backend.database.entities.SudokuBoards
+import com.app.backend.database.services.SudokuService.insertSudoku
+import com.app.backend.sudoku.Node
+import com.app.backend.sudoku.SudokuBoard
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.exposed.sql.deleteAll
 import org.jetbrains.exposed.sql.transactions.transaction

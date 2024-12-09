@@ -19,10 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.backend.database.services.SudokuService.getSudokuById
-import com.example.backend.database.services.SudokuService.updateSudoku
-import com.example.backend.sudoku.SudokuBoard
-import com.example.ui.sudokuComponents.SudokuBoardUI
+import com.app.backend.database.services.SudokuService.getSudokuById
+import com.app.backend.database.services.SudokuService.updateSudoku
+import com.app.backend.sudoku.SudokuBoard
+import com.app.ui.sudokuComponents.SudokuBoardUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

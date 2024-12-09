@@ -1,4 +1,4 @@
-package com.example.backend.sudoku
+package com.app.backend.sudoku
 import kotlinx.serialization.Serializable
 
 // Representation of sudoku node. x,y: coordinates on the board, number: value of the node, if equal to 0- no number
