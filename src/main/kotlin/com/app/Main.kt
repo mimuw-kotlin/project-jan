@@ -14,7 +14,7 @@ fun App() {
 }
 
 fun main() = application {
-//    populate()
+    populate()
     runBlocking {
         database.DatabaseConfig.init()
     }

@@ -48,3 +48,8 @@ W projeckie użyłem takich bibliotek/funkcjonalności jal:
 - Exposed – biblioteka służąca do obsługi połączeń z bazą danych w Kotlinie,
 - Korutyny- użyte trochę na siłę, do komunikacji z bazą danych. Aby symulować dłuższą operację, ręcznie dodaję
 sleep(1000) w funkcjach komunikujących się z bazą danych.
+
+# Jak uruchomić aplikację?
+Można wywołać polecenie ./gradlew run. Ważna notatka- w funkcji main w pliku Main.kt jest wywoływana funckja populate().
+Czyści ona lokalnie bazę danych, oraz insertuje do niej 2 plansze sudoku. Jeżeli chcemy, aby stan planszy zapisywał się
+między wywołaniami aplikacji- po pierwszym uruchomieniu należy usunąć (wykomentować) tą linijkę.
