@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+//Mastermind Screen, currently not developed
 @Composable
 fun MastermindScreen(onBack: () -> Unit) {
     Column(

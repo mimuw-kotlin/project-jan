@@ -38,7 +38,7 @@ fun GameMenu() {
 
 @Composable
 fun MenuScreen(onGameSelect: (Game) -> Unit) {
-    val games = listOf("Sudoku", "Mastermind", "Tick Tac Toe")
+    val games = listOf("Sudoku", "Mastermind", "Tic Tac Toe")
     var currentIndex by remember { mutableStateOf(0) }
 
     Column(
@@ -48,7 +48,7 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
     ) {
 
         Text(
-            text = "Game Menu",
+            text = "Main Menu",
             fontSize = 50.sp,
             color = Color.Black,
             fontFamily = FontFamily.Serif
@@ -58,11 +58,11 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
 
         Box(
             modifier = Modifier
-                .padding(16.dp) // Padding around the Box
-                .fillMaxWidth() // Box takes up full width
-                .height(300.dp) // Set height for Box
-                .background(Color(0xFFD0B8A8), RoundedCornerShape(16.dp)) // Background color + rounded corners
-                .padding(16.dp) // Padding inside the Box
+                .padding(16.dp)
+                .fillMaxWidth()
+                .height(300.dp)
+                .background(Color(0xFFD0B8A8), RoundedCornerShape(16.dp))
+                .padding(16.dp)
         ) {
             Column(
                 modifier = Modifier
@@ -70,16 +70,15 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Displaying the name of the game
                 Text(
                     text = games[currentIndex],
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFC5705D),
-                    modifier = Modifier.padding(bottom = 16.dp) // Space between text and buttons
+                    modifier = Modifier.padding(bottom = 16.dp)
                 )
 
-                // Buttons to navigate between games
+                //Navigation between games
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center
@@ -106,7 +105,7 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                         Text("Next")
                     }
                 }
-
+                //Selecting game
                 Button(
                     onClick = {
                         when (currentIndex) {
@@ -128,7 +127,5 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                 }
             }
         }
-
-
     }
 }

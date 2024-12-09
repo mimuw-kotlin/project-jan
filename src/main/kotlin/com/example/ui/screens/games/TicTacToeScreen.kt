@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+//Tick Tack Toe Screen, currently not developed
 @Composable
 fun TicTacToeScreen(onBack: () -> Unit) {
     Column(
@@ -15,7 +16,7 @@ fun TicTacToeScreen(onBack: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Tick Tac Toe - Placeholder")
+        Text("Tic Tac Toe - Placeholder")
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onBack) {
             Text("Back")

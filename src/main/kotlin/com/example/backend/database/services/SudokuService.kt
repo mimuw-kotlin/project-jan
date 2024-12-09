@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
+//Basic functions that provide comunication with databse
 object SudokuService {
     suspend fun insertSudoku(board: String, id: Int) = withContext(Dispatchers.IO) {
         transaction {

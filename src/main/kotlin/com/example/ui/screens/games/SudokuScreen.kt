@@ -23,10 +23,12 @@ fun SudokuScreen(onBack: () -> Unit) {
     var selectedCell by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var selectedNumber by remember { mutableStateOf<Int?>(null) }
     var board by remember { mutableStateOf<SudokuBoard?>(null) }
-    var showPopup by remember { mutableStateOf(false) }
+    // var showPopup by remember { mutableStateOf(false) } TODO in the future
+    //Is the board completed
     var completed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
+    //Loading the initial board - for now errors are displayed in the console, should be developed further
     LaunchedEffect(Unit) {
         try {
             board = getInitialSudoku()
@@ -91,6 +93,7 @@ fun SudokuScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.width(8.dp))
 
+            //Saving current state of the board to the database
             Button(onClick = {
                 scope.launch {
                     val temp = board
@@ -107,6 +110,7 @@ fun SudokuScreen(onBack: () -> Unit) {
 
             Spacer(modifier = Modifier.width(8.dp))
 
+            //Displaying the basic board to the user.
             Button(onClick = {
                 scope.launch {
                     try {
@@ -126,6 +130,7 @@ fun SudokuScreen(onBack: () -> Unit) {
     }
 }
 
+//Updating board state
 fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): Pair<SudokuBoard, Boolean> {
     if (!board!!.content[x][y].generated){
         val newBoard = board.content.toMutableList().apply {
@@ -140,6 +145,9 @@ fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): Pair<SudokuBoa
    return Pair(board, false)
 }
 
+//Coroutines use is unnecessary - just to provide an example of communication with the database.
+//In my project it is really fast, but potentially- interactions with database shouldn't block the main thread.
+//I manually add sleep() to simulate a longer process.
 suspend fun getInitialSudoku() : SudokuBoard{
     return withContext(Dispatchers.IO){
         sleep(1000) //To show that coroutines work :)
@@ -149,6 +157,7 @@ suspend fun getInitialSudoku() : SudokuBoard{
     }
 }
 
+//Error handling should be developed further
 suspend fun saveSudoku(board: SudokuBoard?): SudokuBoard? {
     if (board != null) {
         try{
@@ -165,7 +174,7 @@ suspend fun saveSudoku(board: SudokuBoard?): SudokuBoard? {
 
 suspend fun newGame() : SudokuBoard{
     return withContext(Dispatchers.IO){
-        sleep(1000) //To show that coroutines work :)
+        sleep(1000)
         val sudoku = getSudokuById(2)!!
         updateSudoku(sudoku, 1)
         SudokuBoard.deserialize(sudoku)

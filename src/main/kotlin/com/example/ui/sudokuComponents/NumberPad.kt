@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+//Number pad that enables user inserting numbers into the board
 @Composable
 fun NumberPad(onNumberClick: (Int) -> Unit) {
     Column(
@@ -30,6 +31,7 @@ fun NumberPad(onNumberClick: (Int) -> Unit) {
                 }
             }
         }
+        //Additional feature: clearing the cell
         Button(
             onClick = { onNumberClick(0)},
             colors = ButtonDefaults.buttonColors(

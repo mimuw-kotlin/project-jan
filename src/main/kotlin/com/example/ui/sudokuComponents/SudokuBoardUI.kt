@@ -23,7 +23,7 @@ fun SudokuBoardUI(
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        // Loop over each row in the Sudoku board
+        //Checking if the board is completed
         if(completed) {
             Box(
                 modifier = Modifier
@@ -35,7 +35,7 @@ fun SudokuBoardUI(
             }
         }else{
             when(sudokuBoard){
-                null -> {Box(
+                null -> {Box(   //Simulation of long communication, loading screen
                     modifier = Modifier
                         .width(fullLen)
                         .height(fullLen),
@@ -43,7 +43,7 @@ fun SudokuBoardUI(
                 ){
                     Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
                 }}
-                else -> {
+                else -> {   //Displaying the whole board
                     for (row in 0 until 9) {
                         Row (){
                             Divider(
@@ -56,7 +56,6 @@ fun SudokuBoardUI(
                         Row(
                             horizontalArrangement = Arrangement.spacedBy(0.dp)
                         ) {
-                            // Loop over each node in the current row
                             Divider(
                                 color = dividerColor,
                                 modifier = Modifier
@@ -88,7 +87,6 @@ fun SudokuBoardUI(
                                         .height(cellWidth)
                                         .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
                                 )
-                                // Add vertical lines between the nodes
                             }
                         }
 

@@ -12,7 +12,8 @@ data class SudokuBoard(
     }
 ) {
 
-    fun isValidNumber(x: Int, y: Int, number: Int): Boolean {
+    //Checking if a number is colliding with any number due to sudoku rules.
+    private fun isValidNumber(x: Int, y: Int, number: Int): Boolean {
         if (content[x].any { it.number == number && it.y != y }){
             return false
         }
@@ -33,6 +34,7 @@ data class SudokuBoard(
         return true
     }
 
+    //Checking if the whole board is valid- if the user won.
     fun isBoardValid(): Boolean {
         for (row in content) {
             for (node in row) {
@@ -44,6 +46,7 @@ data class SudokuBoard(
         return true
     }
 
+    //Updating the whole board, checking if nodes collide with something or not.
     fun validate() {
         for (row in content) {
             for (node in row) {
@@ -52,6 +55,7 @@ data class SudokuBoard(
         }
     }
 
+    //Serializing and deserializing between JSON and string.
     fun serialize(): String {
         return Json.encodeToString(content)
     }
