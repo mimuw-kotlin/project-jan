@@ -22,7 +22,7 @@ fun main() = application {
     runBlocking {
         database.DatabaseConfig.init()
     }
-    Window(onCloseRequest = ::exitApplication) {
+    Window(onCloseRequest = ::exitApplication, title = "PuzzleVerse") {
         App()
     }
 }
