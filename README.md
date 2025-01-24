@@ -53,3 +53,18 @@ sleep(1000) w funkcjach komunikujących się z bazą danych.
 Można wywołać polecenie ./gradlew run. Ważna notatka- w funkcji main w pliku Main.kt jest wywoływana funckja populate().
 Czyści ona lokalnie bazę danych, oraz insertuje do niej 2 plansze sudoku. Jeżeli chcemy, aby stan planszy zapisywał się
 między wywołaniami aplikacji- po pierwszym uruchomieniu należy usunąć (wykomentować) tą linijkę.
+
+# Cześć druga:
+- Naprawić błędy z PR:
+  - dwa razy wpisane dependencje
+  - stare wersje bibliotek
+  - Enum Game -> Screen
+  - selectedNumber można przypisać do jakiegoś vala i wtedy po sprawdzeniu != null nie trzeba będzie robić !!
+  - przypadek że board jest nullem (SudokuBoard? -> SudokuBoard)
+  - Pair<SudokuBoard, Boolean> -> lepiej dataclass z nazwanymi polami
+  - podświetlanie liczb edytowanych przez użytkownika (rozróżnienie ich z liczbami początkowymi)
+- Licznik czasu (możliwość pauzy, może w trakcie pauzy być widoczny ranking)
+- Generator planszy (algorytmy grafowe)
+- Notatki
+- Unit Test (np dla generowania sudoku)
+- UI Test
