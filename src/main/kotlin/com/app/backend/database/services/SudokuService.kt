@@ -3,11 +3,8 @@ package com.app.backend.database.services
 import com.app.backend.database.entities.SudokuBoards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 // Basic functions that provide comunication with databse
 object SudokuService {
@@ -22,7 +19,7 @@ object SudokuService {
 
     suspend fun getSudokuById(id: Int): String? = withContext(Dispatchers.IO) {
         transaction {
-            SudokuBoards.select { SudokuBoards.id eq id }
+            SudokuBoards.selectAll().where { SudokuBoards.id eq id }
                 .map { it[SudokuBoards.board] }
                 .singleOrNull()
         }

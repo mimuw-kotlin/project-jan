@@ -18,12 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.backend.sudoku.CellCoordinates
 import com.app.backend.sudoku.SudokuBoard
 
 @Composable
 fun SudokuBoardUI(
     sudokuBoard: SudokuBoard?,
-    selectedNode: Pair<Int, Int>?,
+    selectedNode: CellCoordinates?,
     onNodeClick: (Int, Int) -> Unit,
     completed: Boolean
 ) {
@@ -73,13 +74,13 @@ fun SudokuBoardUI(
                             )
                             for (col in 0 until 9) {
                                 val nodeValue = sudokuBoard.content[row][col]
-                                val isSelected = selectedNode == Pair(row, col)
+                                val isSelected = selectedNode == CellCoordinates(row, col)
                                 var isAdjacentToSelected = false
                                 var isAdjacentSquare = false
                                 if (selectedNode != null) {
-                                    isAdjacentToSelected = (selectedNode.first == row) || (selectedNode.second == col)
+                                    isAdjacentToSelected = (selectedNode.x == row) || (selectedNode.y == col)
                                     isAdjacentSquare =
-                                        (row / 3) * 3 + (col / 3) == (selectedNode.first / 3) * 3 + (selectedNode.second / 3)
+                                        (row / 3) * 3 + (col / 3) == (selectedNode.x / 3) * 3 + (selectedNode.y / 3)
                                 }
 
                                 SudokuNode(
@@ -88,7 +89,8 @@ fun SudokuBoardUI(
                                     onClick = { onNodeClick(row, col) },
                                     isAdjacentToSelected = isAdjacentToSelected,
                                     isAdjacentSquare = isAdjacentSquare,
-                                    isValid = nodeValue.isValid
+                                    isValid = nodeValue.isValid,
+                                    isGenerated = nodeValue.generated
                                 )
                                 Divider(
                                     color = dividerColor,
@@ -122,7 +124,8 @@ fun SudokuNode(
     isAdjacentToSelected: Boolean,
     isAdjacentSquare: Boolean,
     onClick: () -> Unit,
-    isValid: Boolean
+    isValid: Boolean,
+    isGenerated: Boolean,
 ) {
     Box(
         modifier = Modifier
@@ -144,7 +147,7 @@ fun SudokuNode(
         Text(
             text = if (value == 0) "" else value.toString(),
             fontSize = 18.sp,
-            color = Color.Black
+            color = if(isGenerated) Color.Black else userColor,
         )
     }
 }

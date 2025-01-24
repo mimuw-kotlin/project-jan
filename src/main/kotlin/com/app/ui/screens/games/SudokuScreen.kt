@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.backend.database.services.SudokuService.getSudokuById
 import com.app.backend.database.services.SudokuService.updateSudoku
+import com.app.backend.sudoku.BoardStatus
+import com.app.backend.sudoku.CellCoordinates
 import com.app.backend.sudoku.SudokuBoard
 import com.app.ui.sudokuComponents.SudokuBoardUI
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +33,9 @@ import java.lang.Thread.sleep
 @Composable
 fun SudokuScreen(onBack: () -> Unit) {
     // State of the board, currently selected cell and number
-    var selectedCell by remember { mutableStateOf<Pair<Int, Int>?>(null) }
+    var selectedCell by remember { mutableStateOf<CellCoordinates?>(null) }
     var selectedNumber by remember { mutableStateOf<Int?>(null) }
     var board by remember { mutableStateOf<SudokuBoard?>(null) }
-    // var showPopup by remember { mutableStateOf(false) } TODO in the future
     // Is the board completed
     var completed by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
@@ -67,7 +68,7 @@ fun SudokuScreen(onBack: () -> Unit) {
                 selectedNode = selectedCell,
                 completed = completed,
                 onNodeClick = { x, y ->
-                    selectedCell = Pair(x, y)
+                    selectedCell = CellCoordinates(x, y)
                 }
             )
 
@@ -77,12 +78,10 @@ fun SudokuScreen(onBack: () -> Unit) {
                 onNumberClick = { number ->
                     selectedNumber = number
                     selectedCell?.let { (x, y) ->
-                        if (selectedNumber != null) {
-                            scope.launch {
-                                val updatedBoard = updateCell(board, x, y, selectedNumber!!)
-                                board = updatedBoard.first
-                                completed = updatedBoard.second
-                            }
+                        scope.launch {
+                            val updatedBoard = updateCell(board!!, x, y, number)
+                            board = updatedBoard.board
+                            completed = updatedBoard.completed
                         }
                     }
                 }
@@ -112,7 +111,7 @@ fun SudokuScreen(onBack: () -> Unit) {
                     scope.launch {
                         val temp = board
                         board = null
-                        board = saveSudoku(temp)
+                        board = saveSudoku(temp!!)
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
@@ -149,8 +148,8 @@ fun SudokuScreen(onBack: () -> Unit) {
 }
 
 // Updating board state
-fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): Pair<SudokuBoard, Boolean> {
-    if (!board!!.content[x][y].generated) {
+fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int): BoardStatus {
+    if (!board.content[x][y].generated) {
         val newBoard = board.content.toMutableList().apply {
             this[x] = this[x].toMutableList().apply {
                 this[y] = this[y].copy(number = number)
@@ -158,9 +157,9 @@ fun updateCell(board: SudokuBoard?, x: Int, y: Int, number: Int): Pair<SudokuBoa
         }
         val result = SudokuBoard(newBoard)
         result.validate()
-        return Pair(result, result.isBoardValid())
+        return BoardStatus(result, result.isBoardValid())
     }
-    return Pair(board, false)
+    return BoardStatus(board, false)
 }
 
 // Coroutines use is unnecessary - just to provide an example of communication with the database.
@@ -175,17 +174,14 @@ suspend fun getInitialSudoku(): SudokuBoard {
     }
 }
 
-// Error handling should be furtehr developped
-suspend fun saveSudoku(board: SudokuBoard?): SudokuBoard? {
-    if (board != null) {
-        try {
-            withContext(Dispatchers.IO) {
-                sleep(1000)
-                updateSudoku(board.serialize(), 1)
-            }
-        } catch (e: Exception) {
-            println("Error saving sudoku: ${e.message}")
+suspend fun saveSudoku(board: SudokuBoard): SudokuBoard {
+    try {
+        withContext(Dispatchers.IO) {
+            sleep(1000)
+            updateSudoku(board.serialize(), 1)
         }
+    } catch (e: Exception) {
+        println("Error saving sudoku: ${e.message}")
     }
     return board
 }

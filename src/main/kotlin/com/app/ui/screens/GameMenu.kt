@@ -30,27 +30,27 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.ui.screens.games.MastermindScreen
 import com.app.ui.screens.games.TicTacToeScreen
-enum class Game {
+enum class Screen {
     MENU, SUDOKU, MASTERMIND, TIC_TAC_TOE
 }
 
 @Composable
 fun GameMenu() {
-    var currentScreen by remember { mutableStateOf(Game.MENU) }
+    var currentScreen by remember { mutableStateOf(Screen.MENU) }
 
     when (currentScreen) {
-        Game.MENU -> MenuScreen { selectedGame ->
+        Screen.MENU -> MenuScreen { selectedGame ->
             currentScreen = selectedGame
         }
-        Game.SUDOKU -> SudokuScreen { currentScreen = Game.MENU }
-        Game.MASTERMIND -> MastermindScreen { currentScreen = Game.MENU }
-        Game.TIC_TAC_TOE -> TicTacToeScreen { currentScreen = Game.MENU }
+        Screen.SUDOKU -> SudokuScreen { currentScreen = Screen.MENU }
+        Screen.MASTERMIND -> MastermindScreen { currentScreen = Screen.MENU }
+        Screen.TIC_TAC_TOE -> TicTacToeScreen { currentScreen = Screen.MENU }
     }
 }
 
 @Composable
-fun MenuScreen(onGameSelect: (Game) -> Unit) {
-    val games = listOf("Sudoku", "Mastermind", "Tic Tac Toe")
+fun MenuScreen(onGameSelect: (Screen) -> Unit) {
+    val screens = listOf("Sudoku", "Mastermind", "Tic Tac Toe")
     var currentIndex by remember { mutableStateOf(0) }
 
     Column(
@@ -81,7 +81,7 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = games[currentIndex],
+                    text = screens[currentIndex],
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFFC5705D),
@@ -94,7 +94,7 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Button(
-                        onClick = { currentIndex = if (currentIndex > 0) currentIndex - 1 else games.size - 1 },
+                        onClick = { currentIndex = if (currentIndex > 0) currentIndex - 1 else screens.size - 1 },
                         modifier = Modifier.padding(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(0xFFC5705D),
@@ -105,7 +105,7 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                     }
 
                     Button(
-                        onClick = { currentIndex = (currentIndex + 1) % games.size },
+                        onClick = { currentIndex = (currentIndex + 1) % screens.size },
                         modifier = Modifier.padding(8.dp),
                         colors = ButtonDefaults.buttonColors(
                             backgroundColor = Color(0xFFC5705D),
@@ -119,9 +119,9 @@ fun MenuScreen(onGameSelect: (Game) -> Unit) {
                 Button(
                     onClick = {
                         when (currentIndex) {
-                            0 -> onGameSelect(Game.SUDOKU)
-                            1 -> onGameSelect(Game.MASTERMIND)
-                            2 -> onGameSelect(Game.TIC_TAC_TOE)
+                            0 -> onGameSelect(Screen.SUDOKU)
+                            1 -> onGameSelect(Screen.MASTERMIND)
+                            2 -> onGameSelect(Screen.TIC_TAC_TOE)
                         }
                     },
                     modifier = Modifier
