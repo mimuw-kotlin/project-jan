@@ -25,13 +25,6 @@ object SudokuService {
         }
     }
 
-    suspend fun getAllSudokus(): List<String> = withContext(Dispatchers.IO) {
-        transaction {
-            SudokuBoards.selectAll()
-                .map { it[SudokuBoards.board] }
-        }
-    }
-
     suspend fun updateSudoku(board: String, id: Int) = withContext(Dispatchers.IO) {
         transaction {
             SudokuBoards.update({ SudokuBoards.id eq id }) {
