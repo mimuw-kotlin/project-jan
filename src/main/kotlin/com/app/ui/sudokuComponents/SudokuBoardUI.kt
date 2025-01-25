@@ -90,7 +90,8 @@ fun SudokuBoardUI(
                                     isAdjacentToSelected = isAdjacentToSelected,
                                     isAdjacentSquare = isAdjacentSquare,
                                     isValid = nodeValue.isValid,
-                                    isGenerated = nodeValue.generated
+                                    isGenerated = nodeValue.generated,
+                                    notes = nodeValue.notes
                                 )
                                 Divider(
                                     color = dividerColor,
@@ -126,6 +127,7 @@ fun SudokuNode(
     onClick: () -> Unit,
     isValid: Boolean,
     isGenerated: Boolean,
+    notes: MutableSet<Int>
 ) {
     Box(
         modifier = Modifier
@@ -144,10 +146,31 @@ fun SudokuNode(
             ),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = if (value == 0) "" else value.toString(),
-            fontSize = 18.sp,
-            color = if(isGenerated) Color.Black else userColor,
-        )
+        //Displaying notes
+        if(notes.size == 0){
+            Text(
+                text = if (value > 0) value.toString() else "",
+                fontSize = 18.sp,
+                color = if(isGenerated) Color.Black else userColor,
+            )
+        }else{
+            Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
+                for (row in 0 until 3) {
+                    Row() {
+                        for (col in 1 until 4) {
+                            val number = row * 3 + col
+                            Box(modifier = Modifier.size(13.dp),
+                                    contentAlignment = Alignment.Center) {
+                                if(notes.contains(number)){
+                                    Text("$number", fontSize = 8.sp, color = userColor)
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+
     }
 }

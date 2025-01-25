@@ -38,6 +38,8 @@ fun SudokuScreen(onBack: () -> Unit) {
     var board by remember { mutableStateOf<SudokuBoard?>(null) }
     // Is the board completed
     var completed by remember { mutableStateOf(false) }
+    // Is editing notes enabled.
+    var isEditingNotes by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
 
     // Loading the initial board - for now errors are displayed in the console, should be developed further
@@ -76,15 +78,19 @@ fun SudokuScreen(onBack: () -> Unit) {
 
             NumberPad(
                 onNumberClick = { number ->
-                    selectedNumber = number
-                    selectedCell?.let { (x, y) ->
-                        scope.launch {
-                            val updatedBoard = updateCell(board!!, x, y, number)
-                            board = updatedBoard.board
-                            completed = updatedBoard.completed
+                    if (number in 0..9) {
+                        selectedNumber = number
+                        selectedCell?.let { (x, y) ->
+                            scope.launch {
+                                val updatedBoard = updateCell(board!!, x, y, number, isEditingNotes)
+                                board = updatedBoard.board
+                                completed = updatedBoard.completed
+                            }
                         }
+                    }else if(number == -1){
+                        isEditingNotes = !isEditingNotes
                     }
-                }
+                }, isEditingNotes
             )
         }
 
@@ -147,17 +153,37 @@ fun SudokuScreen(onBack: () -> Unit) {
     }
 }
 
-// Updating board state
-fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int): BoardStatus {
+// Updating board state: two cases, when editing board and editing nodes.
+// Editing nodes has to reload the board, so we change the number in the node but don't validate.
+// Additionally, operations like setting a number or clearing a cell deletes all notes.
+fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int, isEditingBoard: Boolean): BoardStatus {
     if (!board.content[x][y].generated) {
-        val newBoard = board.content.toMutableList().apply {
-            this[x] = this[x].toMutableList().apply {
-                this[y] = this[y].copy(number = number)
+        if (!isEditingBoard){
+            val newBoard = board.content.toMutableList().apply {
+                this[x] = this[x].toMutableList().apply {
+                    this[y] = this[y].copy(number = number, notes = mutableSetOf())
+                }
             }
+            val result = SudokuBoard(newBoard)
+            result.validate()
+            return BoardStatus(result, result.isBoardValid())
+        }else{
+            val newBoard = board.content.toMutableList().apply {
+                this[x] = this[x].toMutableList().apply {
+                    if(number == 0){
+                        this[y] = this[y].copy(number = number, notes = mutableSetOf())
+                    }else{
+                        if(number == this[y].number){
+                            this[y] = this[y].copy(number = -this[y].number, notes = this[y].changeNote(number))
+                        }else{
+                            this[y] = this[y].copy(number = number, notes = this[y].changeNote(number))
+                        }
+                    }
+                }
+            }
+            val result = SudokuBoard(newBoard)
+            return BoardStatus(result, false)
         }
-        val result = SudokuBoard(newBoard)
-        result.validate()
-        return BoardStatus(result, result.isBoardValid())
     }
     return BoardStatus(board, false)
 }

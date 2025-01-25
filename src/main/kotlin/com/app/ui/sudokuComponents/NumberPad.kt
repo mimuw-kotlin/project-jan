@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 
 // Number pad that enables user inserting numbers into the board
 @Composable
-fun NumberPad(onNumberClick: (Int) -> Unit) {
+fun NumberPad(onNumberClick: (Int) -> Unit, isEditingNotes: Boolean) {
     Column(
         modifier = Modifier
             .padding(16.dp),
@@ -41,6 +41,16 @@ fun NumberPad(onNumberClick: (Int) -> Unit) {
             )
         ) {
             Text("Clear Cell")
+        }
+        // Additional feature: adding notes to a cell
+        Button(
+            onClick = { onNumberClick(-1) },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(0xFFC5705D),
+                contentColor = Color.White
+            )
+        ){
+            Text(if(!isEditingNotes) "Notes: inactive" else "Notes: active")
         }
     }
 }
