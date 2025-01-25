@@ -13,6 +13,7 @@ object SudokuService {
             SudokuBoards.insert {
                 it[SudokuBoards.board] = board
                 it[SudokuBoards.id] = id
+                it[currentTime] = 0L
             }
         }
     }
@@ -25,10 +26,19 @@ object SudokuService {
         }
     }
 
-    suspend fun updateSudoku(board: String, id: Int) = withContext(Dispatchers.IO) {
+    suspend fun getSudokuTimeById(id: Int): Long? = withContext(Dispatchers.IO) {
+        transaction {
+            SudokuBoards.selectAll().where { SudokuBoards.id eq id }
+                .map { it[SudokuBoards.currentTime] }
+                .singleOrNull()
+        }
+    }
+
+    suspend fun updateSudoku(board: String, id: Int, currentTime: Long) = withContext(Dispatchers.IO) {
         transaction {
             SudokuBoards.update({ SudokuBoards.id eq id }) {
                 it[SudokuBoards.board] = board
+                it[SudokuBoards.currentTime] = currentTime
             }
         }
     }

@@ -1,5 +1,6 @@
 package database
 
+import com.app.backend.database.entities.Rankings
 import com.app.backend.database.entities.SudokuBoards
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,6 +18,7 @@ object DatabaseConfig {
 
         transaction {
             SchemaUtils.create(SudokuBoards)
+            SchemaUtils.create(Rankings)
         }
     }
 }

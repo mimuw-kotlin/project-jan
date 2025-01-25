@@ -26,90 +26,110 @@ fun SudokuBoardUI(
     sudokuBoard: SudokuBoard?,
     selectedNode: CellCoordinates?,
     onNodeClick: (Int, Int) -> Unit,
-    completed: Boolean
+    completed: Boolean,
+    isPaused: Boolean,
+    rankings: List<Long>
 ) {
     Column(
         modifier = Modifier.padding(8.dp)
     ) {
-        // Checking if the board is completed
-        if (completed) {
-            Box(
+        // Checking if the board is loading
+        if(sudokuBoard == null){
+            Box( // Simulation of long communication, loading screen
                 modifier = Modifier
                     .width(fullLen)
                     .height(fullLen),
                 contentAlignment = Alignment.Center
             ) {
-                Text("CONGRATULATIONS", fontSize = 40.sp)
+                Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
             }
-        } else {
-            when (sudokuBoard) {
-                null -> {
-                    Box( // Simulation of long communication, loading screen
-                        modifier = Modifier
-                            .width(fullLen)
-                            .height(fullLen),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
-                    }
+        }else if(!isPaused){
+            //Checking if the board is completed.
+            if (completed) {
+                Box(
+                    modifier = Modifier
+                        .width(fullLen)
+                        .height(fullLen),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("CONGRATULATIONS", fontSize = 40.sp)
                 }
-                else -> { // Displaying the whole board
-                    for (row in 0 until 9) {
-                        Row() {
-                            Divider(
-                                color = dividerColor,
-                                modifier = Modifier
-                                    .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
-                                    .width(fullLen)
+            } else {
+                // Displaying the whole board
+                for (row in 0 until 9) {
+                    Row() {
+                        Divider(
+                            color = dividerColor,
+                            modifier = Modifier
+                                .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
+                                .width(fullLen)
+                        )
+                    }
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(0.dp)
+                    ) {
+                        Divider(
+                            color = dividerColor,
+                            modifier = Modifier
+                                .height(cellWidth)
+                                .width(dividerWidth)
+                        )
+                        for (col in 0 until 9) {
+                            val nodeValue = sudokuBoard.content[row][col]
+                            val isSelected = selectedNode == CellCoordinates(row, col)
+                            var isAdjacentToSelected = false
+                            var isAdjacentSquare = false
+                            if (selectedNode != null) {
+                                isAdjacentToSelected = (selectedNode.x == row) || (selectedNode.y == col)
+                                isAdjacentSquare =
+                                    (row / 3) * 3 + (col / 3) == (selectedNode.x / 3) * 3 + (selectedNode.y / 3)
+                            }
+
+                            SudokuNode(
+                                value = nodeValue.number,
+                                isSelected = isSelected,
+                                onClick = { onNodeClick(row, col) },
+                                isAdjacentToSelected = isAdjacentToSelected,
+                                isAdjacentSquare = isAdjacentSquare,
+                                isValid = nodeValue.isValid,
+                                isGenerated = nodeValue.generated,
+                                notes = nodeValue.notes
                             )
-                        }
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(0.dp)
-                        ) {
                             Divider(
                                 color = dividerColor,
                                 modifier = Modifier
                                     .height(cellWidth)
-                                    .width(dividerWidth)
+                                    .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
                             )
-                            for (col in 0 until 9) {
-                                val nodeValue = sudokuBoard.content[row][col]
-                                val isSelected = selectedNode == CellCoordinates(row, col)
-                                var isAdjacentToSelected = false
-                                var isAdjacentSquare = false
-                                if (selectedNode != null) {
-                                    isAdjacentToSelected = (selectedNode.x == row) || (selectedNode.y == col)
-                                    isAdjacentSquare =
-                                        (row / 3) * 3 + (col / 3) == (selectedNode.x / 3) * 3 + (selectedNode.y / 3)
-                                }
-
-                                SudokuNode(
-                                    value = nodeValue.number,
-                                    isSelected = isSelected,
-                                    onClick = { onNodeClick(row, col) },
-                                    isAdjacentToSelected = isAdjacentToSelected,
-                                    isAdjacentSquare = isAdjacentSquare,
-                                    isValid = nodeValue.isValid,
-                                    isGenerated = nodeValue.generated,
-                                    notes = nodeValue.notes
-                                )
-                                Divider(
-                                    color = dividerColor,
-                                    modifier = Modifier
-                                        .height(cellWidth)
-                                        .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
-                                )
-                            }
                         }
                     }
-                    Row() {
-                        Divider(
-                            color = Color.Black,
-                            thickness = dividerWidth,
-                            modifier = Modifier
-                                .height(dividerWidth)
-                                .width(fullLen)
-                        )
+                }
+                Row() {
+                    Divider(
+                        color = Color.Black,
+                        thickness = dividerWidth,
+                        modifier = Modifier
+                            .height(dividerWidth)
+                            .width(fullLen)
+                    )
+                }
+            }
+        }else{
+            // Displaying the ranking
+            Column(
+                modifier = Modifier
+                    .width(fullLen)
+                    .height(fullLen),
+                Arrangement.SpaceEvenly,
+            ) {
+                // For now always top 10 players.
+                for (i in 1..10) {
+                    Row(modifier = Modifier.padding(start = 10.dp)) {
+                        if(rankings.size >= i){
+                            Text("${i}: ${DisplayTime(rankings[i - 1])}", modifier = Modifier.padding(start = 10.dp), fontSize = 20.sp)
+                        }else{
+                            Text("${i}: None", modifier = Modifier.padding(start = 10.dp), fontSize = 20.sp)
+                        }
                     }
                 }
             }

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 fun NumberPad(onNumberClick: (Int) -> Unit, isEditingNotes: Boolean) {
     Column(
         modifier = Modifier
-            .padding(16.dp),
+            .padding(start = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         (1..9).chunked(3).forEach { rowNumbers ->
