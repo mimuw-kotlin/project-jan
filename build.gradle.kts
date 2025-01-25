@@ -1,3 +1,6 @@
+@file:OptIn(ExperimentalComposeLibrary::class)
+
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
@@ -30,6 +33,13 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.1")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
     implementation("org.slf4j:slf4j-simple:2.0.16")
+    testImplementation(kotlin("test"))
+    @OptIn(ExperimentalComposeLibrary::class)
+    testImplementation(compose.uiTest)
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 compose.desktop {

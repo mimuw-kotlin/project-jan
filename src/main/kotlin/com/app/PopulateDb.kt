@@ -3,6 +3,7 @@ package com.app
 import addMyTime
 import com.app.backend.database.entities.Rankings
 import com.app.backend.database.entities.SudokuBoards
+import com.app.backend.database.services.RankingService.addRanking
 import com.app.backend.database.services.SudokuService.insertSudoku
 import com.app.backend.sudoku.Node
 import com.app.backend.sudoku.SudokuBoard
@@ -65,10 +66,10 @@ fun populate() = runBlocking {
     insertSudoku(board2.serialize(), 3)
     insertSudoku(board2.serialize(), 4)
 
-    addMyTime(1000000L, 1)
-    addMyTime(500000L, 1)
+    addRanking(1, 1000000L)
+    addRanking(1, 500000L)
 
-    addMyTime(2000000L, 3)
-    addMyTime(300000L, 3)
+    addRanking(3, 2000000L)
+    addRanking(3, 300000L)
 
 }
