@@ -68,3 +68,29 @@ między wywołaniami aplikacji- po pierwszym uruchomieniu należy usunąć (wyko
 - Notatki
 - Unit Test (np dla generowania sudoku)
 - UI Test
+
+# Finalny opis funckjonalności z cz.2:
+- Naprawiono wszystkie błędy z części 1,
+- Licznik czasu:
+  - Czas liczony w milisekudnach, często updateowany (za pomocą korutyn),
+  - Możliwośc pauzy,
+  - W trackie pauzy zamiast planszy wyświetla się ranking dla aktualnej gry,
+  - Czas zapisuje się wraz z planszą, oraz zeruje w odpowiednich przypadkach: gdy gra się skończy czy gdy zaczniemy nową grę,
+  - Gdy plansza zostanie ukończona, aktualny czas zapisuje się do rankingu,
+- Dodana nowa plansza, oraz możliwość przełączania między planszami (jeśli czas był wcześniej zapisany, to po wczytaniu planszy również się pojawi)
+- Funkcjonalność notatek- możliwość wejścia w tryb edycji notatek,
+- Jeśli włączony jest tryb edycji- kliknięcie na przycisk sprawia, że zapisze się notatka a nie liczba. 
+- Ostatecznie jako że bardziej rozbudowałem funkcjonalność czasu i rankingu (rozszerzenie o drugą grę, nowy model w bazie danych, wyświetlanie rankingu - zajęło to sporo czasu + testy) to zrezygnowałem z generatora plansz
+
+# Podsumowanie dodanych plików podczas cz.2:
+- /backend/sudoku/CellCoordinates , BoardStatus, BoardWithTime - wszystkie 3 klasy powstały za wskazówką, aby nie uzywać nienazwanych Par, a data class
+- /backend/database/entities/Rankings - zawiera deklaracje tabeli przechowującej rankingi- dla każdej gry osobny ranking
+- /backend/database/services/RankingService - pomocnicze funkcje dodające/getujące ranking
+- /ui/screens/games/SudokuScreen.kt - (tu zaszło dużo zmian, nie jest to dodany plik)- wydzieliłem inne pomniejsze pliki i umieściłem je w sudokuComponents, oraz dodawałem nowe funckjonalnośc
+- /ui/sudokuComponents/Popup.kt - plik został usunięty
+- /ui/sudokuComponents/DisplayTime.kt - używany w kilku miejscach komponent ładnie formatujący czas z milisekund
+- /ui/sudokuComponents/Menu.kt - zawiera przyciski ulokowane na dole SudokuScreen
+- /ui/sudokuComponents/Timer.kt - wyświetlanie timera, przycisk do pauzy jest ulokowany w Menu.kt
+- oraz inne zmodyfikowane pliki, w mniejszym bądź większym stopniu.
+
+# Testy:
