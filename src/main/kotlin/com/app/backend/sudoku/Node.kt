@@ -12,9 +12,20 @@ data class Node(
     val y: Int,
     var number: Int = 0,
     var generated: Boolean = false,
-    var isValid: Boolean = true
+    var isValid: Boolean = true,
+    var notes: MutableSet<Int> = mutableSetOf(),
 ) {
     override fun toString(): String {
         return number.toString()
+    }
+
+    // Adding/deleting a note depending on the fact if the node already existed.
+    fun changeNote(note: Int): MutableSet<Int> {
+        if (notes.contains(note)) {
+            notes.remove(note)
+        } else {
+            notes.add(note)
+        }
+        return notes
     }
 }

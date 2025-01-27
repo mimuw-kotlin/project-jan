@@ -11,3 +11,4 @@ val dividerColor = Color.Black
 val selectedCellColor = Color(0xFFC5705D)
 val adjacentColor = Color(0xFFD0B8A8)
 val fullLen = dividerWidth * 4 + thinDividerWidth * 6 + cellWidth * 9
+val userColor = Color(0xFF2865ab)

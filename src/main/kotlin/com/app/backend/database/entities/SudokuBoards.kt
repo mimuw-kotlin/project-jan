@@ -7,5 +7,6 @@ import org.jetbrains.exposed.sql.Table
 object SudokuBoards : Table() {
     val id = integer("id")
     val board = text("board")
+    val currentTime = long("currentTime")
     override val primaryKey = PrimaryKey(id)
 }
