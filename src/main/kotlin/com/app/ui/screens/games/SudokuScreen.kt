@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.backend.database.entities.SudokuBoards.currentTime
 import com.app.backend.database.services.RankingService.addRanking
 import com.app.backend.database.services.RankingService.getRankingsForBoard
 import com.app.backend.database.services.SudokuService.getSudokuById
@@ -35,7 +32,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.Thread.sleep
 
 @Composable
 fun SudokuScreen(onBack: () -> Unit) {
@@ -66,18 +62,20 @@ fun SudokuScreen(onBack: () -> Unit) {
     }
 
     Column(
-        modifier = Modifier
-            .padding(8.dp),
+        modifier =
+            Modifier
+                .padding(8.dp),
         verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text("Sudoku", fontSize = 28.sp, modifier = Modifier.padding(8.dp))
 
         Row(
-            modifier = Modifier
-                .padding(4.dp),
+            modifier =
+                Modifier
+                    .padding(4.dp),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SudokuBoardUI(
                 sudokuBoard = board,
@@ -87,13 +85,13 @@ fun SudokuScreen(onBack: () -> Unit) {
                     selectedCell = CellCoordinates(x, y)
                 },
                 isPaused = isPaused,
-                rankings = rankings
+                rankings = rankings,
             )
 
             Spacer(modifier = Modifier.width(16.dp))
 
             Column {
-                Timer(isPaused, currentTime, updateTime = {delta -> currentTime += delta})
+                Timer(isPaused, currentTime, updateTime = { delta -> currentTime += delta })
                 NumberPad(
                     onNumberClick = { number ->
                         if (number in 0..9) {
@@ -102,20 +100,23 @@ fun SudokuScreen(onBack: () -> Unit) {
                                 scope.launch {
                                     val updatedBoard = updateCell(board!!, x, y, number, isEditingNotes, scope, currentTime, currentBoard)
                                     board = updatedBoard.board
-                                    if (updatedBoard.completed){
+                                    if (updatedBoard.completed) {
                                         isPaused = true
                                     }
                                     completed = updatedBoard.completed
                                 }
                             }
-                        }else if(number == -1){
+                        } else if (number == -1) {
                             isEditingNotes = !isEditingNotes
                         }
-                    }, isEditingNotes
+                    },
+                    isEditingNotes,
                 )
             }
         }
-        Menu(onBack, isPaused,
+        Menu(
+            onBack,
+            isPaused,
             onClickSaveGame = {
                 scope.launch {
                     isPaused = true
@@ -123,7 +124,8 @@ fun SudokuScreen(onBack: () -> Unit) {
                     board = null
                     board = saveSudoku(temp!!, currentBoard, currentTime)
                 }
-            }, onClickNewGame = {
+            },
+            onClickNewGame = {
                 scope.launch {
                     try {
                         board = null
@@ -134,9 +136,11 @@ fun SudokuScreen(onBack: () -> Unit) {
                         println("Error during creating new game: ${e.message}")
                     }
                 }
-            }, onClickPause = {
+            },
+            onClickPause = {
                 isPaused = !isPaused
-            }, onClickNextGame = {
+            },
+            onClickNextGame = {
                 scope.launch {
                     board = null
                     isPaused = true
@@ -147,7 +151,7 @@ fun SudokuScreen(onBack: () -> Unit) {
                     board = boardWithTime.board
                     currentTime = boardWithTime.time
                 }
-            }
+            },
         )
     }
 }
@@ -155,14 +159,25 @@ fun SudokuScreen(onBack: () -> Unit) {
 // Updating board state: two cases, when editing board and editing nodes.
 // Editing nodes has to reload the board, so we change the number in the node but don't validate.
 // Additionally, operations like setting a number or clearing a cell deletes all notes.
-fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int, isEditingBoard: Boolean, scope: CoroutineScope, currentTime: Long, currentBoard: Int): BoardStatus {
+fun updateCell(
+    board: SudokuBoard,
+    x: Int,
+    y: Int,
+    number: Int,
+    isEditingBoard: Boolean,
+    scope: CoroutineScope,
+    currentTime: Long,
+    currentBoard: Int,
+): BoardStatus {
     if (!board.content[x][y].generated) {
-        if (!isEditingBoard){
-            val newBoard = board.content.toMutableList().apply {
-                this[x] = this[x].toMutableList().apply {
-                    this[y] = this[y].copy(number = number, notes = mutableSetOf())
+        if (!isEditingBoard) {
+            val newBoard =
+                board.content.toMutableList().apply {
+                    this[x] =
+                        this[x].toMutableList().apply {
+                            this[y] = this[y].copy(number = number, notes = mutableSetOf())
+                        }
                 }
-            }
             val result = SudokuBoard(newBoard)
             result.validate()
             // If the board is completed, add time to rankings.
@@ -173,20 +188,22 @@ fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int, isEditingBoard: 
                 }
             }
             return BoardStatus(result, completed)
-        }else{
-            val newBoard = board.content.toMutableList().apply {
-                this[x] = this[x].toMutableList().apply {
-                    if(number == 0){
-                        this[y] = this[y].copy(number = number, notes = mutableSetOf())
-                    }else{
-                        if(number == this[y].number){
-                            this[y] = this[y].copy(number = -this[y].number, notes = this[y].changeNote(number))
-                        }else{
-                            this[y] = this[y].copy(number = number, notes = this[y].changeNote(number))
+        } else {
+            val newBoard =
+                board.content.toMutableList().apply {
+                    this[x] =
+                        this[x].toMutableList().apply {
+                            if (number == 0) {
+                                this[y] = this[y].copy(number = number, notes = mutableSetOf())
+                            } else {
+                                if (number == this[y].number) {
+                                    this[y] = this[y].copy(number = -this[y].number, notes = this[y].changeNote(number))
+                                } else {
+                                    this[y] = this[y].copy(number = number, notes = this[y].changeNote(number))
+                                }
+                            }
                         }
-                    }
                 }
-            }
             val result = SudokuBoard(newBoard)
             return BoardStatus(result, false)
         }
@@ -199,7 +216,6 @@ fun updateCell(board: SudokuBoard, x: Int, y: Int, number: Int, isEditingBoard: 
 // I manually add sleep() to simulate a longer process.
 suspend fun getSudoku(boardNumber: Int): BoardWithTime {
     return withContext(Dispatchers.IO) {
-        sleep(1000) // To show that coroutines work :)
         val result = SudokuBoard.deserialize(getSudokuById(boardNumber)!!)
         result.validate()
         val time = getSudokuTimeById(boardNumber)
@@ -207,10 +223,13 @@ suspend fun getSudoku(boardNumber: Int): BoardWithTime {
     }
 }
 
-suspend fun saveSudoku(board: SudokuBoard, boardNumber: Int, currentTime: Long): SudokuBoard {
+suspend fun saveSudoku(
+    board: SudokuBoard,
+    boardNumber: Int,
+    currentTime: Long,
+): SudokuBoard {
     try {
         withContext(Dispatchers.IO) {
-            sleep(1000)
             updateSudoku(board.serialize(), boardNumber, currentTime = currentTime)
         }
     } catch (e: Exception) {
@@ -221,23 +240,23 @@ suspend fun saveSudoku(board: SudokuBoard, boardNumber: Int, currentTime: Long):
 
 suspend fun newGame(boardNumber: Int): SudokuBoard {
     return withContext(Dispatchers.IO) {
-        sleep(1000) // To show that coroutines work :)
         val sudoku = getSudokuById(boardNumber + 1)!!
         updateSudoku(sudoku, boardNumber, 0)
         SudokuBoard.deserialize(sudoku)
     }
 }
 
-suspend fun addMyTime(time: Long, boardNumber: Int){
+suspend fun addMyTime(
+    time: Long,
+    boardNumber: Int,
+) {
     withContext(Dispatchers.IO) {
-        sleep(1000)
         addRanking(boardNumber, time)
     }
 }
 
-suspend fun getRankings(boardNumber: Int): List<Long>{
+suspend fun getRankings(boardNumber: Int): List<Long> {
     return withContext(Dispatchers.IO) {
-        sleep(1000) // To show that coroutines work :)
         val result = getRankingsForBoard(boardNumber, 10)
         result
     }
