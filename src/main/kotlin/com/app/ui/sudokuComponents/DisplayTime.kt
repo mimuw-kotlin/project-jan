@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 
 // Additional function to display time from milliseconds.
 @Composable
-fun DisplayTime(currentTime: Long): String{
+fun DisplayTime(currentTime: Long): String {
     val hours = (currentTime / 3600000L) % 24
     val minutes = (currentTime / 60000L) % 60
     val seconds = (currentTime / 1000L) % 60

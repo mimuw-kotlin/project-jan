@@ -5,7 +5,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -14,11 +19,15 @@ import kotlinx.coroutines.delay
 
 // Timer component with pause functionality.
 @Composable
-fun Timer(isPaused: Boolean, currentTime: Long, updateTime: (Long) -> Unit) {
-    var lastSystemTime by remember{ mutableStateOf(System.currentTimeMillis()) }
+fun Timer(
+    isPaused: Boolean,
+    currentTime: Long,
+    updateTime: (Long) -> Unit,
+) {
+    var lastSystemTime by remember { mutableStateOf(System.currentTimeMillis()) }
 
     LaunchedEffect(isPaused) {
-        if(!isPaused){
+        if (!isPaused) {
             lastSystemTime = System.currentTimeMillis()
             delay(10)
             val delta = System.currentTimeMillis() - lastSystemTime
@@ -26,8 +35,8 @@ fun Timer(isPaused: Boolean, currentTime: Long, updateTime: (Long) -> Unit) {
             lastSystemTime = System.currentTimeMillis()
         }
     }
-    LaunchedEffect(currentTime){
-        if(!isPaused){
+    LaunchedEffect(currentTime) {
+        if (!isPaused) {
             val delta = System.currentTimeMillis() - lastSystemTime
             updateTime(delta)
             lastSystemTime = System.currentTimeMillis()
@@ -35,15 +44,21 @@ fun Timer(isPaused: Boolean, currentTime: Long, updateTime: (Long) -> Unit) {
         }
     }
 
-    Button(onClick = {}, Modifier.padding(start = 16.dp, bottom = 8.dp), enabled = false, colors = ButtonDefaults.buttonColors(
-        disabledBackgroundColor = Color(0xFFC5705D), // Same as enabled background
-        disabledContentColor = Color.White
-    )){
+    Button(
+        onClick = {},
+        Modifier.padding(start = 16.dp, bottom = 8.dp),
+        enabled = false,
+        colors =
+            ButtonDefaults.buttonColors(
+                disabledBackgroundColor = Color(0xFFC5705D),
+                disabledContentColor = Color.White,
+            ),
+    ) {
         Text(
             DisplayTime(currentTime),
             fontSize = 20.sp,
             color = Color.White,
-            modifier = Modifier.width(200.dp)
+            modifier = Modifier.width(200.dp),
         )
     }
 }

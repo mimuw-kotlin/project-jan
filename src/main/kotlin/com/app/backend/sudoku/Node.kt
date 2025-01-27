@@ -19,11 +19,11 @@ data class Node(
         return number.toString()
     }
 
-    //Adding/deleting a note depending on the fact if the node already existed.
+    // Adding/deleting a note depending on the fact if the node already existed.
     fun changeNote(note: Int): MutableSet<Int> {
-        if (notes.contains(note)){
+        if (notes.contains(note)) {
             notes.remove(note)
-        }else{
+        } else {
             notes.add(note)
         }
         return notes

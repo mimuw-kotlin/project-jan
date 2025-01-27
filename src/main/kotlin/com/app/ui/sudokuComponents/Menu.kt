@@ -1,29 +1,43 @@
 package com.app.ui.sudokuComponents
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 // I moved the menu buttons to a new class, to improve readability in the project.
 // It contains buttons: Main Menu, Save, New Game, Pause
 @Composable
-fun Menu(onBack: () -> Unit, isPaused: Boolean, onClickSaveGame: () -> Unit, onClickNewGame:() -> Unit, onClickPause: () -> Unit, onClickNextGame: () -> Unit) {
+fun Menu(
+    onBack: () -> Unit,
+    isPaused: Boolean,
+    onClickSaveGame: () -> Unit,
+    onClickNewGame: () -> Unit,
+    onClickPause: () -> Unit,
+    onClickNextGame: () -> Unit,
+) {
     Row(
-        modifier = Modifier
-            .padding(4.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        modifier =
+            Modifier
+                .padding(4.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         Button(
             onClick = onBack,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFC5705D),
-                contentColor = Color.White
-            )
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White,
+                ),
         ) {
             Text("Main Menu")
         }
@@ -33,10 +47,11 @@ fun Menu(onBack: () -> Unit, isPaused: Boolean, onClickSaveGame: () -> Unit, onC
         // Saving current state of the board to the database
         Button(
             onClick = onClickSaveGame,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFC5705D),
-                contentColor = Color.White
-            )
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White,
+                ),
         ) {
             Text("Save progress")
         }
@@ -46,10 +61,11 @@ fun Menu(onBack: () -> Unit, isPaused: Boolean, onClickSaveGame: () -> Unit, onC
         // Displaying the basic board to the user.
         Button(
             onClick = onClickNewGame,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFC5705D),
-                contentColor = Color.White
-            )
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White,
+                ),
         ) {
             Text("New Game")
         }
@@ -58,11 +74,12 @@ fun Menu(onBack: () -> Unit, isPaused: Boolean, onClickSaveGame: () -> Unit, onC
 
         Button(
             onClick = onClickNextGame,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFC5705D),
-                contentColor = Color.White
-            )
-        ){
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White,
+                ),
+        ) {
             Text("Next Game")
         }
 
@@ -70,12 +87,14 @@ fun Menu(onBack: () -> Unit, isPaused: Boolean, onClickSaveGame: () -> Unit, onC
 
         Button(
             onClick = onClickPause,
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Color(0xFFC5705D),
-                contentColor = Color.White
-            )
-        ){
-            Text(if(isPaused) "Unpause" else "Pause")
+            colors =
+                ButtonDefaults.buttonColors(
+                    backgroundColor = Color(0xFFC5705D),
+                    contentColor = Color.White,
+                ),
+            modifier = Modifier.testTag("pauseButton"),
+        ) {
+            Text(if (isPaused) "Unpause" else "Pause")
         }
     }
 }

@@ -13,12 +13,13 @@ fun App() {
     GameMenu()
 }
 
-fun main() = application {
-    populate()
-    runBlocking {
-        database.DatabaseConfig.init()
+fun main() =
+    application {
+        populate()
+        runBlocking {
+            database.DatabaseConfig.init()
+        }
+        Window(onCloseRequest = ::exitApplication, title = "PuzzleVerse") {
+            App()
+        }
     }
-    Window(onCloseRequest = ::exitApplication, title = "PuzzleVerse") {
-        App()
-    }
-}

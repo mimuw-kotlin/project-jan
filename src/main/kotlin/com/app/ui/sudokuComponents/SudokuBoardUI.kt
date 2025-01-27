@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.backend.sudoku.CellCoordinates
@@ -28,51 +29,56 @@ fun SudokuBoardUI(
     onNodeClick: (Int, Int) -> Unit,
     completed: Boolean,
     isPaused: Boolean,
-    rankings: List<Long>
+    rankings: List<Long>,
 ) {
     Column(
-        modifier = Modifier.padding(8.dp)
+        modifier = Modifier.padding(8.dp),
     ) {
         // Checking if the board is loading
-        if(sudokuBoard == null){
-            Box( // Simulation of long communication, loading screen
-                modifier = Modifier
-                    .width(fullLen)
-                    .height(fullLen),
-                contentAlignment = Alignment.Center
+        if (sudokuBoard == null) {
+            // Simulation of long communication, loading screen
+            Box(
+                modifier =
+                    Modifier
+                        .width(fullLen)
+                        .height(fullLen),
+                contentAlignment = Alignment.Center,
             ) {
                 Text("Loading...", fontSize = 20.sp, modifier = Modifier.padding(8.dp))
             }
-        }else if(!isPaused){
-            //Checking if the board is completed.
+        } else if (!isPaused) {
+            // Checking if the board is completed.
             if (completed) {
                 Box(
-                    modifier = Modifier
-                        .width(fullLen)
-                        .height(fullLen),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .width(fullLen)
+                            .height(fullLen),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text("CONGRATULATIONS", fontSize = 40.sp)
                 }
             } else {
                 // Displaying the whole board
                 for (row in 0 until 9) {
-                    Row() {
+                    Row {
                         Divider(
                             color = dividerColor,
-                            modifier = Modifier
-                                .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
-                                .width(fullLen)
+                            modifier =
+                                Modifier
+                                    .height(if (row % 3 == 0) dividerWidth else thinDividerWidth)
+                                    .width(fullLen),
                         )
                     }
                     Row(
-                        horizontalArrangement = Arrangement.spacedBy(0.dp)
+                        horizontalArrangement = Arrangement.spacedBy(0.dp),
                     ) {
                         Divider(
                             color = dividerColor,
-                            modifier = Modifier
-                                .height(cellWidth)
-                                .width(dividerWidth)
+                            modifier =
+                                Modifier
+                                    .height(cellWidth)
+                                    .width(dividerWidth),
                         )
                         for (col in 0 until 9) {
                             val nodeValue = sudokuBoard.content[row][col]
@@ -93,42 +99,53 @@ fun SudokuBoardUI(
                                 isAdjacentSquare = isAdjacentSquare,
                                 isValid = nodeValue.isValid,
                                 isGenerated = nodeValue.generated,
-                                notes = nodeValue.notes
+                                notes = nodeValue.notes,
+                                coordinates = CellCoordinates(row, col),
                             )
                             Divider(
                                 color = dividerColor,
-                                modifier = Modifier
-                                    .height(cellWidth)
-                                    .width(if (col % 3 == 2) dividerWidth else thinDividerWidth)
+                                modifier =
+                                    Modifier
+                                        .height(cellWidth)
+                                        .width(if (col % 3 == 2) dividerWidth else thinDividerWidth),
                             )
                         }
                     }
                 }
-                Row() {
+                Row {
                     Divider(
                         color = Color.Black,
                         thickness = dividerWidth,
-                        modifier = Modifier
-                            .height(dividerWidth)
-                            .width(fullLen)
+                        modifier =
+                            Modifier
+                                .height(dividerWidth)
+                                .width(fullLen),
                     )
                 }
             }
-        }else{
+        } else {
             // Displaying the ranking
             Column(
-                modifier = Modifier
-                    .width(fullLen)
-                    .height(fullLen),
+                modifier =
+                    Modifier
+                        .width(fullLen)
+                        .height(fullLen),
                 Arrangement.SpaceEvenly,
             ) {
                 // For now always top 10 players.
+                Row {
+                    Text("RANKING", fontSize = 25.sp, modifier = Modifier.padding(start = 10.dp))
+                }
                 for (i in 1..10) {
                     Row(modifier = Modifier.padding(start = 10.dp)) {
-                        if(rankings.size >= i){
-                            Text("${i}: ${DisplayTime(rankings[i - 1])}", modifier = Modifier.padding(start = 10.dp), fontSize = 20.sp)
-                        }else{
-                            Text("${i}: None", modifier = Modifier.padding(start = 10.dp), fontSize = 20.sp)
+                        if (rankings.size >= i) {
+                            Text(
+                                "$i: ${DisplayTime(rankings[i - 1])}",
+                                modifier = Modifier.padding(start = 10.dp),
+                                fontSize = 20.sp,
+                            )
+                        } else {
+                            Text("$i: None", modifier = Modifier.padding(start = 10.dp), fontSize = 20.sp)
                         }
                     }
                 }
@@ -147,50 +164,54 @@ fun SudokuNode(
     onClick: () -> Unit,
     isValid: Boolean,
     isGenerated: Boolean,
-    notes: MutableSet<Int>
+    notes: MutableSet<Int>,
+    coordinates: CellCoordinates,
 ) {
     Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clickable(onClick = onClick)
-            .background(
-                color = if (!isValid) {
-                    Color.Red
-                } else if (isSelected) {
-                    selectedCellColor
-                } else if (isAdjacentToSelected || isAdjacentSquare) {
-                    adjacentColor
-                } else {
-                    Color.Transparent
-                }
-            ),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .size(40.dp)
+                .clickable(onClick = onClick)
+                .background(
+                    color =
+                        if (!isValid) {
+                            Color.Red
+                        } else if (isSelected) {
+                            selectedCellColor
+                        } else if (isAdjacentToSelected || isAdjacentSquare) {
+                            adjacentColor
+                        } else {
+                            Color.Transparent
+                        },
+                )
+                .testTag("node ${coordinates.x} ${coordinates.y}"),
+        contentAlignment = Alignment.Center,
     ) {
-        //Displaying notes
-        if(notes.size == 0){
+        // Displaying notes
+        if (notes.size == 0) {
             Text(
                 text = if (value > 0) value.toString() else "",
                 fontSize = 18.sp,
-                color = if(isGenerated) Color.Black else userColor,
+                color = if (isGenerated) Color.Black else userColor,
             )
-        }else{
+        } else {
             Column(verticalArrangement = Arrangement.spacedBy(0.dp)) {
                 for (row in 0 until 3) {
-                    Row() {
+                    Row {
                         for (col in 1 until 4) {
                             val number = row * 3 + col
-                            Box(modifier = Modifier.size(13.dp),
-                                    contentAlignment = Alignment.Center) {
-                                if(notes.contains(number)){
+                            Box(
+                                modifier = Modifier.size(13.dp),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                if (notes.contains(number)) {
                                     Text("$number", fontSize = 8.sp, color = userColor)
                                 }
                             }
                         }
-
                     }
                 }
             }
         }
-
     }
 }

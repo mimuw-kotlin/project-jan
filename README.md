@@ -94,3 +94,5 @@ między wywołaniami aplikacji- po pierwszym uruchomieniu należy usunąć (wyko
 - oraz inne zmodyfikowane pliki, w mniejszym bądź większym stopniu.
 
 # Testy:
+- proste testy dla backendu, usuwanie dodawnaie sudoku/rankingów
+- proste testy dla frontendu, testowanie edytowania planszy oraz dodawania notatek

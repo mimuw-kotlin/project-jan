@@ -1,18 +1,21 @@
 package com.app.backend.sudoku
 
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 data class SudokuBoard(
-    val content: MutableList<MutableList<Node>> = MutableList(9) { x ->
-        MutableList(9) { y ->
-            Node(x, y)
-        }
-    }
+    val content: MutableList<MutableList<Node>> =
+        MutableList(9) { x ->
+            MutableList(9) { y ->
+                Node(x, y)
+            }
+        },
 ) {
-
     // Checking if a number is colliding with any number due to sudoku rules.
-    private fun isValidNumber(x: Int, y: Int, number: Int): Boolean {
+    private fun isValidNumber(
+        x: Int,
+        y: Int,
+        number: Int,
+    ): Boolean {
         if (content[x].any { it.number == number && it.y != y }) {
             return false
         }

@@ -9,16 +9,17 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseConfig {
-    suspend fun init() = withContext(Dispatchers.IO) {
-        // Connecting to SQLite
-        Database.connect(
-            url = "jdbc:sqlite:backend.db",
-            driver = "org.sqlite.JDBC"
-        )
+    suspend fun init() =
+        withContext(Dispatchers.IO) {
+            // Connecting to SQLite
+            Database.connect(
+                url = "jdbc:sqlite:backend.db",
+                driver = "org.sqlite.JDBC",
+            )
 
-        transaction {
-            SchemaUtils.create(SudokuBoards)
-            SchemaUtils.create(Rankings)
+            transaction {
+                SchemaUtils.create(SudokuBoards)
+                SchemaUtils.create(Rankings)
+            }
         }
-    }
 }
